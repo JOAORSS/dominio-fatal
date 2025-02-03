@@ -27,7 +27,7 @@ export async function GET(request: Request) {
       FROM estoque_produto ep 
       JOIN cores c ON ep.cor_id = c.id 
       JOIN tamanhos t ON ep.tamanho_id = t.id 
-      WHERE ep.produto_id = 1 
+      WHERE ep.produto_id = ? 
       ORDER BY c.nome, FIELD(t.nome, 'PP', 'P', 'M', 'G', 'GG', 'GX');`;
 
     const [resultsProduto] = await connection.execute<mysql.RowDataPacket[]>(queryProduto, values);

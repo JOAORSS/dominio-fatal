@@ -9,14 +9,14 @@ export default function ProdutoImagens({ imagens }: { imagens: string[] }) {
     const [imagemSelecionada, setImagemSelecionada] = useState(imagens[0])
 
     function handleImagenClick(imagen: string) {
-        setImagemSelecionada(`/images/${imagen}`)
+        setImagemSelecionada(imagen)
     }
 
     return (
         <div className={styles.produtoImagensContainer}>
             <div className={styles.containerLateral}>
                 {imagens.map((imagen, index) => (
-                    <ImagenLateral key={index} imagen={`/images/${imagen}`} onClick={handleImagenClick} />
+                    <ImagenLateral key={index} imagemSelecionada={imagemSelecionada} imagen={imagen} onClick={handleImagenClick} />
                 ))}
             </div>
             <Image 
