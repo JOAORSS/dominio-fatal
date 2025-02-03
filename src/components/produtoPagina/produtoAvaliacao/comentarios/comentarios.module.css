@@ -1,0 +1,34 @@
+
+.comentarios{
+    display: flex;
+    width: 678px;
+    height: 395px;
+    padding: 20px 16px;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 20px;
+    border-radius: 14px;
+    background-color: var(--background-interno);
+    box-shadow: var(--box-shadow);
+    height: fit-content;
+}
+
+.comentar{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 17px;
+    align-self: stretch;
+}
+
+.escritaDestaque{
+    color: var(--escrita);
+    font-weight: 700;
+    margin: 0px;
+}
+
+.ultimosComentario{
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}

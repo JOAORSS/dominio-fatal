@@ -1,0 +1,48 @@
+.descricao{
+    display: flex;
+    position: relative;
+    flex-direction: column;
+    justify-content: left;
+    align-items: flex-start;
+    margin-top: 20px;
+}
+
+.descricao__text{
+    height: 60px;
+    overflow: hidden;
+}
+
+.blockText{
+    background: linear-gradient(to top, var(--background-interno), transparent);
+    position: absolute;
+    bottom: 20px;
+    width: 100%;
+    height: 50px;
+}
+
+.lerMais{
+    background: none;
+    padding: 0px;
+    border: none;
+    margin-top: 10px !important;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--cor-primaria);
+    font-family: Raleway;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+    text-decoration-line: underline !important;
+    text-decoration-style: solid;
+    text-decoration-skip-ink: auto;
+    text-decoration-thickness: auto;
+    text-underline-offset: auto;
+    text-underline-position: from-font;
+    text-transform: capitalize;
+    &:hover{
+        color: #8c20a1e5;
+    }
+}

@@ -1,0 +1,18 @@
+.marker{
+    background-color: #A2A2A2;
+    cursor: pointer;
+    width: 80px;
+    height: 6px;
+    transition: 200ms ease-in;
+}
+
+.hover{
+    &:hover{
+        transition: 600ms ease-out;
+        background-color: #6c2c7991;
+    }
+}
+
+.marker__active{
+    background-color: var(--cor-primaria);
+}

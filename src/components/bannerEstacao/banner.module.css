@@ -1,0 +1,47 @@
+.bannerEstacao{
+    position: relative;
+    width: 100vw;
+    height: 450px;
+    display: flex;
+    overflow: hidden;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    background: linear-gradient(106deg, rgba(94, 22, 108, 0.81) -11.73%, rgba(147, 34, 169, 0.86) 41.06%, rgba(183, 43, 210, 0.90) 63.15%);
+}
+
+.imagem{
+    width: fit-content;
+    object-fit: contain;
+    position: absolute;
+    z-index: 2;
+    right: 0px;
+}
+
+.content{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: left;
+    margin: 10%;
+}
+
+.content__titulo{
+    color: var(--escrita);
+    text-wrap: wrap;
+    width: 520px;
+    font-family: var(--font-destaques);
+    font-size: 64px !important;
+    font-weight: 400;
+}
+
+.trapezio {
+    width: 750px;
+    height: 450px;
+    background: url("/images/imageEstacao.jpeg");
+    background-position-y: -45px;
+    background-position-x: -55px;
+    background-size: cover;
+    clip-path: polygon(0 0, 100% 0, 100% 100%, 20% 100%);
+    box-shadow: 10px 10px 20px rgba(0, 0, 0, 0.5); 
+    }

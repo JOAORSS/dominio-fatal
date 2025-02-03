@@ -1,0 +1,22 @@
+.avaliacao {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-top: 20px;
+  gap: 20px;
+}
+
+.titulo{
+    color: var(--escrita);
+    font-size: 32px;
+    font-style: normal;
+    font-weight: 300;
+    line-height: normal;
+    width: 100%;
+    margin-bottom: 20px !important;
+}
+
+.container{
+    width: 1024px;
+}

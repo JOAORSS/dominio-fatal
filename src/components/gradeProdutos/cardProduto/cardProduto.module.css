@@ -1,0 +1,70 @@
+.cardProduto{
+    display: flex;
+    width: 228px;
+    height: fit-content;
+    max-height: 408px !important;
+    padding: 14px 20px;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+    flex-shrink: 0;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.imagem{
+    height: 200px;
+    width: 100%;
+    flex-shrink: 0;
+    align-self: stretch;
+    object-fit: cover;
+    border-radius: 5px;
+    aspect-ratio: 3/4;
+    max-height: 320px;
+}
+
+.nome{
+    align-self: stretch;
+    color: var(--escrita);
+    font-family: Raleway;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+}
+
+.maisCores{
+    align-self: stretch;
+    display: flex;
+    align-items: center;
+    justify-content: left;
+    gap: 10px;
+}
+
+.maisCores__legenda{
+    margin: 0px;
+    color: var(--detalhes);
+    font-family: Raleway;
+    font-size: 12px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: normal;
+}
+
+
+.preco{
+    color: var(--escrita);
+    font-family: Raleway;
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 900;
+    line-height: normal;
+}
+
+
+.precoECores{
+    width: 100%;
+    display: flex;
+    flex-direction: row-reverse;
+    justify-content: space-between;
+}

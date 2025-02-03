@@ -1,0 +1,47 @@
+.classificacao{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 15px;
+    width: 264px;
+    height: 289px;
+    padding: 0px 16px;
+    box-shadow: var(--box-shadow);
+    border-radius: 14px;
+    background-color: var(--background-interno);
+}
+
+.titulo{
+    color: var(--escrita);
+    font-weight: 700;
+    margin: 0;
+    justify-self: left;
+    align-items: self-start;
+    width: 100%;
+}
+
+.classificacao__card{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    width: 186px;
+}
+
+.destaque{
+    color: var(--escrita);
+    font-family: var(--font-destaques);
+    font-size: 24px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+}
+
+.aviso{
+    color: #2E2E2E;
+    font-size: 12px;
+    font-weight: 300;
+    text-align: center;
+}

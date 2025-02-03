@@ -1,0 +1,23 @@
+.categorias{
+    display: flex;
+    flex-direction: column;
+    overflow-x: visible;
+}
+
+.categorias__lista{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    gap: 35px;
+    width: 100%;
+    padding: 0px;
+    margin: 0px;
+}
+
+.divisoria{
+    height: 200px;
+    min-width: 3px;
+    align-self: center;
+    background-color: var(--cor-primaria);
+}

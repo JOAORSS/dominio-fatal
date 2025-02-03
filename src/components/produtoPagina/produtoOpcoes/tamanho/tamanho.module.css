@@ -1,0 +1,40 @@
+.tamanhos{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: flex-start;
+    width: 296px;
+    height: 42px;
+    align-self: stretch;
+}
+
+.tamanho{
+    background-color: transparent;
+    display: flex;
+    width: 42px;
+    height: 42px;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    border-radius: 7px;
+    border: 2px solid var(--detalhes);
+    color: var(--escrita);
+    font-family: Raleway;
+    font-size: 24px !important;
+    font-weight: 400;
+    transition: ease-in 80ms;
+    &:hover{
+        background-color: rgba(94, 22, 108, 0.54);
+        color: #FFF;
+        transition: 80ms;
+    }
+}
+
+.disabled{
+    opacity: 0.5;
+    &:hover{
+        background-color: transparent;
+        color: var(--escrita);
+    }
+}

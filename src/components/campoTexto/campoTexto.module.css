@@ -1,0 +1,10 @@
+.campoTexto{
+    display: flex;
+    width: 100%;
+    align-self: stretch;
+    padding: 12px;
+    align-items: center;
+    gap: 10px;
+    border-radius: 8px;
+    border: 2px solid var(--detalhes);
+}

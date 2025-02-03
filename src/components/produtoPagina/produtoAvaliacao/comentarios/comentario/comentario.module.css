@@ -1,0 +1,22 @@
+.comentario{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+
+}
+
+.escritaDestaque{
+    color: var(--escrita);
+    font-weight: 700;
+    margin: 10px;
+}
+
+.comentario__texto{
+    width: 98%;
+    align-self: self-end;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    gap: 10px;
+}
