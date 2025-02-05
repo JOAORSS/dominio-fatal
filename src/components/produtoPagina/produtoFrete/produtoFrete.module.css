@@ -1,0 +1,20 @@
+.produtoFrete{
+    display: flex;
+    flex-direction: row;
+    width: 1024px;
+    justify-content: space-between;
+    align-self: flex-end;
+    margin-top: 50px;
+    animation: loadIn 0.5s ease-in-out;
+}
+
+@keyframes loadIn {
+    0% {
+        opacity: 0;
+        transform: translateY(50px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}

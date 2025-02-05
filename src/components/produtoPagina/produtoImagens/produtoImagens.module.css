@@ -4,6 +4,10 @@
     object-fit: cover;
     border-radius: 14px;
     border: 3px solid var(--cor-primaria) !important;
+    cursor: -webkit-zoom-in;
+    &:hover{
+        transition: 100ms;
+        transform: scale(1.01);}
 }
 
 .produtoImagensContainer{

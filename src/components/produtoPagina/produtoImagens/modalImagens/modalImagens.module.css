@@ -1,0 +1,72 @@
+.modal{
+    background-color: transparent;
+    border: none;
+    position: absolute;
+    z-index: 110;
+    top: 2vh;
+}
+
+.overlay{
+    background-color: rgba(0, 0, 0, 0.5);
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 100;
+}
+.imagemModal{
+    width: 100%;
+    height: 90vh;
+}
+
+.close{
+    background-color: transparent;
+    border: none;
+}
+
+.close__button{
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    position: fixed;
+    top: 5vh;
+    right: 5vw;
+    &:hover{
+        transition: 200ms;
+        scale: 1.1;
+    }
+}
+
+
+.arrow{
+    cursor: pointer;
+    position: fixed;
+    transition: 300ms ease-in;
+    &:hover{
+    transition: 300ms ease-out;
+    }
+}
+
+.arrow__left{
+    left: 15vw;
+    top: 50%;
+    transform: translateY(-50%);
+    &:hover{
+        left: 14vw;
+    }
+}
+
+.arrow__right{
+    right: 15vw;
+    top: 50%;
+    transform: translateY(-50%);
+    &:hover{
+        right: 14vw;
+    }
+}
+
+.arrow__button{
+    background-color: transparent;
+    border: none;
+}

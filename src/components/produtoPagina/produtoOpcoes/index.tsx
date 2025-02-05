@@ -1,20 +1,20 @@
 "use client"
 
-import { IoMdHeartEmpty, IoMdHeart } from "react-icons/io";
-import styles from "./produtoOpcoes.module.css"
-import Button from "@/components/button";
-import CampoTexto from "@/components/campoTexto";
-import { Produto } from '@/module/produtoApi';
-import Tamanhos from "./tamanho";
-import Cores from "./cor";
 import { useEffect, useState } from "react";
-import useCarrinhoContext from "@/hooks/useCarrinhoContext";
-import callFreteApi from "@/utils/callFreteApi";
-import FreteBox from "./frete";
-import Frete from "@/module/frete";
-import consolidarTamanho from "@/utils/consolidarTamanhos";
+import { IoMdHeartEmpty, IoMdHeart } from "react-icons/io";
 import { consolidarCores } from "@/utils/consolidarCores";
+import { Produto } from '@/module/produtoApi';
+import Frete from "@/module/frete";
+import callFreteApi from "@/utils/callFreteApi";
+import consolidarTamanho from "@/utils/consolidarTamanhos";
+import useCarrinhoContext from "@/hooks/useCarrinhoContext";
+import CampoTexto from "@/components/campoTexto";
+import Button from "@/components/button";
+import Tamanhos from "./tamanho";
 import Warning from "./warning";
+import Cores from "./cor";
+import styles from "./produtoOpcoes.module.css"
+import ProdutoFrete from "../produtoFrete";
 
 function validaPropsCarrinho(tamanho: string, cor: string): boolean {
     if(tamanho && cor){
@@ -37,14 +37,23 @@ export default function ProdutoOpcoes({ produto } : { produto: Produto }) {
     useEffect(() => {
         if (warningCarrinho) {
             setWarningComprar(false);
+            setWarningFrete(false);
         }
     }, [warningCarrinho]);
 
     useEffect(() => {
         if (warningComprar) {
+            setWarningFrete(false);
             setWarningCarrinho(false);
         }
     }, [warningComprar]);
+
+    useEffect(() => {
+        if (warningFrete) {
+            setWarningCarrinho(false);
+            setWarningComprar(false);
+        }
+    }, [warningFrete]);
 
 
     const { adicionarUmProdutoCarrinho, carrinho } = useCarrinhoContext();
@@ -55,6 +64,7 @@ export default function ProdutoOpcoes({ produto } : { produto: Produto }) {
     function handleLike(like : boolean = false) {
         setLiked(like);
     }
+
 
     return(
         <div className={styles.produtoOpcoes}>
@@ -135,25 +145,22 @@ export default function ProdutoOpcoes({ produto } : { produto: Produto }) {
                     <div className={styles.frete__inputs}>
                         <CampoTexto text={cep} onChange={setCep} masked />
                         <Button 
-                            onClick={() => cep.length > 4 
-                                ? callFreteApi(cep, setFrete) 
-                                : setWarningFrete(true)}
+                            onClick={() => {
+                                const sanitizedCep = cep.replace("-", "");
+                                if (sanitizedCep.length === 8) {
+                                    callFreteApi(sanitizedCep, setFrete);
+                                } else {
+                                    setWarningFrete(true);
+                                }
+                            }}
                             maxWidht="88px"
                             type="full"
                         >Calcular</Button>
                     </div>
-                        <div>
-                            {frete.length > 0 && frete[0].status != 500 && frete.map((frete: Frete) => (
-                                <FreteBox 
-                                    key={frete.name}
-                                    name={frete.name} 
-                                    price={frete.price} 
-                                    delivery_range={frete.delivery_range} 
-                                    status={frete.status}
-                                />
-                            )
-                            )}
-                        </div>
+                            {frete.length > 0 
+                                && frete[0].status != 500 
+                                && <ProdutoFrete key={"produto-frete"} fretes={frete} />
+                            }
                     </div>
                 </div>
             </div>

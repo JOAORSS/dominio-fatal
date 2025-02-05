@@ -8,7 +8,9 @@ export default function FreteBox({ name, price, delivery_range, status }: Frete)
         <div data-status={status} className={styles.frete__resultado}>
             <Image
                 className={styles.resultado__img}
-                src={"/images/correios.png"}
+                src={name === "PAC" && "/images/pac.png" 
+                    || name === "SEDEX" && "/images/sedex.png"
+                    || "/images/nvav.svg"}
                 alt="Correios"
                 width={273}
                 height={58}

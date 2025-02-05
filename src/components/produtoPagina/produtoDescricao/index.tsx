@@ -1,18 +1,37 @@
 "use client"
 
-import { useState } from "react";
-import styles from "./descricao.module.css"
+import React, { useState, useEffect, useRef } from 'react';
+import styles from './descricao.module.css';
 
-export default function ProdutoDescricao({ descricao } : { descricao?: string }) {
-
+export default function ProdutoDescricao({ descricao } : { descricao: string }) {
     const [lerMais, setLerMais] = useState(false);
+    const [showButton, setShowButton] = useState(false);
+    const textRef = useRef<HTMLParagraphElement>(null);
+
+    useEffect(() => {
+        if (textRef.current && textRef.current.clientHeight >= 60) {
+            setShowButton(true);
+        }
+    }, [descricao]);
 
     return (
         <div className={styles.descricao}>
             <h2>Descrição</h2>
-            <p className={(lerMais ? "" : styles.descricao__text)}>{descricao}.</p>
-            {!lerMais && <div className={styles.blockText} />}
-            <button onClick={() => setLerMais(!lerMais)} className={styles.lerMais}>{lerMais ? "Ler menos" : "Ler mais"}</button>
+            <div className={styles.textBox}>
+                <p 
+                    style={{ textWrap: "wrap" }} 
+                    className={(lerMais ? "" : styles.descricao__text)} 
+                    ref={textRef}
+                >
+                    {descricao}
+                </p>
+                {showButton && !lerMais && <div className={styles.blockText} />}
+            </div>
+            {showButton && (
+                <button onClick={() => setLerMais(!lerMais)} className={styles.lerMais}>
+                    {lerMais ? "Ler menos" : "Ler mais"}
+                </button>
+            )}
         </div>
     )
 }

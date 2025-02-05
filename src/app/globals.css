@@ -30,6 +30,10 @@
         flex-direction: column;
         justify-content: space-between;
     }
+
+    .overflow-y-hidden{
+        overflow-y: hidden;
+    }
         
     h1 {
       font-family: var(--font-destaques);

@@ -18,7 +18,7 @@
     align-items: center;
     gap: 10px;
     border-radius: 7px;
-    border: 2px solid var(--detalhes);
+    border: 1px solid var(--detalhes);
     color: var(--escrita);
     font-family: Raleway;
     font-size: 24px !important;

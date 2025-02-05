@@ -7,8 +7,7 @@ import ProdutoDescricao from "./produtoDescricao"
 import ProdutoTabela from "./produtoTabela"
 import ProdutoAvaliacao from "./produtoAvaliacao"
 
-
-export default function ProdutoDetalhes({ produto } : { produto: Produto }) {
+export default function ProdutoDetalhes({ comentarios, produto } : { comentarios: {usuario: string, comentario:string}[], produto: Produto }) {
     return (
         <>
             <div className={styles.produto}>
@@ -17,12 +16,12 @@ export default function ProdutoDetalhes({ produto } : { produto: Produto }) {
                 <ProdutoOpcoes produto={produto} />
             </div>
             <div className={styles.produto}>
-                <ProdutoDescricao />
+                <ProdutoDescricao descricao={produto.descricao} />
             </div>
             <div className={styles.produto}>
                 <ProdutoTabela />
             </div>
-            <ProdutoAvaliacao />
+            <ProdutoAvaliacao comentarios={comentarios} />
         </>
     )
 }

@@ -120,12 +120,14 @@
     display: flex;
     flex-direction: column;
     gap: 16px;
+    background-color: var(--background-interno-3);
     align-items: flex-start;
+    box-shadow: -1px 7px 5px 4px #0000004f;
     justify-content: center;
     align-self: stretch;
     border-radius: 14px;
-    padding: 10px;
-    width: 100%;
+    padding: 20px;
+    width: fit-content;
 }
 
 
@@ -136,6 +138,7 @@
     justify-content: left;
     gap: 10px;
     margin: 0px;
+    width: 254px;
 }
 
 .resultado__info{

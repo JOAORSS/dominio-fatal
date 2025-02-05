@@ -19,6 +19,7 @@
     right: 5vw;
     height: fit-content;
     animation: fadeIn 0.5s ease-in-out;
+    z-index: 100;
 }
 
 @keyframes fadeIn {

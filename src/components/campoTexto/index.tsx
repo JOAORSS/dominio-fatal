@@ -28,6 +28,13 @@ export default function CampoTexto({ placeholder, maxWidth, text, onChange, mask
                 id="cep"
                 name="cep" 
             /> 
-            : <input className={styles.campoTexto} style={maxWidthStyle} type="text" placeholder={placeholder} />
+            : <input 
+                className={styles.campoTexto} 
+                value={text} 
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) => onChange(e.target.value)} 
+                style={maxWidthStyle} 
+                type="text" 
+                placeholder={placeholder} 
+            />
     )
 }
