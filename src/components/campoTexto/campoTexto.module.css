@@ -7,4 +7,5 @@
     gap: 10px;
     border-radius: 8px;
     border: 2px solid var(--detalhes);
+    box-sizing: border-box;
 }

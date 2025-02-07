@@ -5,15 +5,16 @@ import styles from "./campoTexto.module.css"
 
 interface inputTextProps { 
     placeholder?: string, 
-    maxWidth?: string, 
+    maxWidth?: string,
+    maxHeigth?: string,
     masked?: boolean | string,
     text: string,
     onChange: (text:string) => void,
 }
 
-export default function CampoTexto({ placeholder, maxWidth, text, onChange, masked = false }: inputTextProps) {
+export default function CampoTexto({ placeholder, maxWidth, maxHeigth, text, onChange, masked = false }: inputTextProps) {
 
-    const maxWidthStyle = {maxWidth: maxWidth};
+    const widthStyle = {maxWidth: maxWidth, maxHeight: maxHeigth};
 
     return (
             masked 
@@ -29,10 +30,10 @@ export default function CampoTexto({ placeholder, maxWidth, text, onChange, mask
                 name="cep" 
             /> 
             : <input 
-                className={styles.campoTexto} 
-                value={text} 
+                className={styles.campoTexto +" apper"} 
+                value={text}
                 onChange={(e: React.ChangeEvent<HTMLInputElement>) => onChange(e.target.value)} 
-                style={maxWidthStyle} 
+                style={widthStyle} 
                 type="text" 
                 placeholder={placeholder} 
             />

@@ -18,6 +18,12 @@ INSERT INTO estoque_produto (produto_id, cor_id, tamanho_id, quantidade) VALUES 
 DELTAR DE PRODUTOS:
 DELETE FROM estoque_produto WHERE produto_id = 1; DELETE FROM comentarios WHERE produto_id = 1; DELETE FROM produtos WHERE id = 1;
 
+SELECT p.nome
+FROM produtos p
+JOIN produto_estacao pe ON p.id = pe.produto_id
+JOIN estacoes e ON pe.estacao_id = e.id
+WHERE e.nome = 'Verão';
+
 
 ## Getting Started
 

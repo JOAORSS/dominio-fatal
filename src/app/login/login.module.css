@@ -1,0 +1,151 @@
+.leyoutlogin{
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    align-items: center;
+    justify-content: center;
+    height: 70vh;
+}
+
+.loginContainer{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    background-color: var(--background-interno);
+    box-shadow: var(--box-shadow);
+    border-radius: 14px;
+    height: 366px;
+}
+
+.login, .cadastro{
+    align-items: center;
+    justify-items: center;
+    width: 312px;
+    padding: 24px;
+    height: 70%;
+    min-height: fit-content;
+    max-height: 80%;
+    max-width: 296px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    text-align: center;
+    border-radius: 14px;
+}
+
+.cadastro{
+    height: 100%;
+    gap: 40px;
+    max-width: none;
+    min-width: fit-content;
+    align-items: center;
+    justify-content: space-between !important;
+    box-shadow: none !important;
+    background-color: transparent;
+    animation: toCadastro ease-in-out 700ms forwards;
+}
+
+.cadastroOut{
+    animation: outCadastro ease-in-out 700ms forwards;
+}
+
+@keyframes outCadastro{
+    from{
+        width: 312px;
+    }
+    to{
+        width: 946px;
+        max-width: none;
+        padding-left: 0px;
+        padding-right: 0px;
+    }
+}
+
+
+
+@keyframes toCadastro{
+    from{
+        width: 946px;
+        max-width: none;
+        padding-left: 0px;
+        padding-right: 0px;
+    }
+    to{
+        width: 312px;
+    }
+}
+
+.texto{
+    margin: 12px 0px !important;
+}
+
+.divisoria__container{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: fit-content;
+    height: 50vh;
+    text-align: center;
+}
+
+.divisoria{
+    height: 100px;
+    width: 2px;
+    background-color: var(--detalhes);
+    margin: 12px 24px;
+}
+
+.divisoria__in{
+    animation: divisoriaIn 700ms forwards;
+    &::after{
+        height: 100px;
+        background-color: transparent;
+        width: 2px;
+    }
+}
+
+@keyframes divisoriaIn {
+    from{
+        height: 0px;
+    }
+    to{
+        height: 100px;
+    }    
+}
+
+.link{
+    margin-top: 12px;
+}
+
+.icon{
+    background-color: transparent;
+    border: solid 2px var(--detalhes);
+    border-radius: 10px;
+    display: flex;
+    width: 296px !important;
+    align-items: center;
+    justify-content: center;
+    height: 40px !important;
+    gap: 12px;
+    cursor: pointer;
+    transition: 300ms;
+    box-shadow: 0 4px 4px #00000040;
+    transition: 200ms;
+    &:hover{
+        border-color: var(--cor-primaria);
+    }
+    &:active{
+        transition: 200ms;
+        box-shadow: inset 0px 0px 2px 3px rgba(0,0,0,0.15);
+    }
+}
+
+.buttons_container{
+    margin-top: 28px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
