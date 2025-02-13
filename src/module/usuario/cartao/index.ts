@@ -1,8 +1,6 @@
 interface CartaoType {
-    numeroCartao: number;
     nomeCartao: string;
-    banco: string;
-    bandeira: string;
+    numeroCartao: number;
     validade: string;
     cvv: number;
 }

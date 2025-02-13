@@ -15,6 +15,8 @@ import Warning from "./warning";
 import Cores from "./cor";
 import styles from "./produtoOpcoes.module.css"
 import ProdutoFrete from "../produtoFrete";
+import useUserContext from "@/hooks/useUserContext";
+import { useRouter } from "next/navigation";
 
 function validaPropsCarrinho(tamanho: string, cor: string): boolean {
     if(tamanho && cor){
@@ -64,6 +66,9 @@ export default function ProdutoOpcoes({ produto } : { produto: Produto }) {
     function handleLike(like : boolean = false) {
         setLiked(like);
     }
+
+    const { usuario } = useUserContext();
+    const router = useRouter();
 
 
     return(
@@ -123,17 +128,22 @@ export default function ProdutoOpcoes({ produto } : { produto: Produto }) {
                 {warningComprar && <Warning close={() => setWarningComprar(false)} text="Selecione uma cor e um tamanho para comprar o produto "/>}
                 <Button 
                     onClick={() => 
-                        validaPropsCarrinho(tamanhoSelecionado, corSelecionada) 
-                        ? (adicionarUmProdutoCarrinho(produto, corSelecionada, tamanhoSelecionado))
-                        : setWarningCarrinho(true)
+                        usuario 
+                        ? (validaPropsCarrinho(tamanhoSelecionado, corSelecionada) 
+                            ? (adicionarUmProdutoCarrinho(produto, corSelecionada, tamanhoSelecionado))
+                            : setWarningCarrinho(true))
+                        : router.push("/login")
                     } 
                     type="full" 
                 >Adicionar ao carrinho</Button>
                 <Button 
                     onClick={() => 
-                        validaPropsCarrinho(tamanhoSelecionado, corSelecionada) 
-                        ? console.log(carrinho)
-                        : setWarningComprar(true)
+                        usuario 
+                        ? (validaPropsCarrinho(tamanhoSelecionado, corSelecionada)
+                            ? console.log(carrinho)
+                            : setWarningComprar(true))
+                        : router.push("/login")
+                        
                     }
                     type="filled" 
                 >Comprar agora</Button>
@@ -143,7 +153,7 @@ export default function ProdutoOpcoes({ produto } : { produto: Produto }) {
                     <label className={styles.frete__label}>Calcular prazo de entrega</label>
                     <div className={styles.frete__cep}>
                     <div className={styles.frete__inputs}>
-                        <CampoTexto text={cep} onChange={setCep} masked />
+                        <CampoTexto text={cep} onChange={setCep} type="masked" />
                         <Button 
                             onClick={() => {
                                 const sanitizedCep = cep.replace("-", "");

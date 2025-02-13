@@ -1,5 +1,5 @@
 import styles from "../perfil.module.css"
-import ConfigBox from "./configBox"
+import ConfigBox, { Logout } from "./configBox"
 
 export default function PerfilConfig() {
     return(
@@ -10,6 +10,7 @@ export default function PerfilConfig() {
             <ConfigBox typePerfil="historico" />
             <ConfigBox typePerfil="FAC" />
             <ConfigBox typePerfil="legal" />
+            <Logout typePerfil="sair" />
         </section>
     )
 }

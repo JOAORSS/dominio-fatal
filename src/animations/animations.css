@@ -1,0 +1,65 @@
+.apper{
+    animation: apper 800ms;
+    animation-fill-mode: forwards;
+}
+
+.desapper{
+    animation: desapper 300ms;
+    animation-fill-mode: forwards;
+}
+
+@keyframes desapper {
+    0% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+    100% {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    
+}
+
+@keyframes apper {
+    0% {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+    
+}
+
+.cadastroDFWidth{
+    animation: cadastroApper 700ms forwards !important;
+    width: 487px !important;
+}
+
+
+.cadastroApper{
+    animation: cadastroApper 700ms forwards !important;
+}
+
+@keyframes cadastroApper {
+    from{
+        width: 366px !important;
+    }
+    to{
+        width: 487px !important;
+    }
+}
+ 
+.cadastroBack{
+    animation: cadastroBack 700ms forwards !important;
+}
+
+@keyframes cadastroBack {
+    from{
+        width: 487px !important;
+    }
+    to{
+        width: 366px !important;
+    }   
+}

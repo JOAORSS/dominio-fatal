@@ -1,0 +1,99 @@
+.container{
+    width: 100%;
+    height: 512px;
+    min-height: fit-content;
+    max-width: 488px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    text-align: center;
+    border-radius: 14px;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--background-interno);
+    box-shadow: var(--box-shadow);
+    position: relative;
+}
+.form__container{
+    display: flex;
+    flex-direction: column;
+    width: 438px;
+    margin: 20px 0px;
+}
+
+.backArrow{
+    position: absolute;
+    top: 24;
+    left: 20;
+    cursor: pointer;
+    border: none;
+    background-color: transparent;
+}
+
+.cadastro__container{
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 6px;
+    box-sizing: border-box;
+    margin-bottom: 16px;
+}
+
+.container__lateral{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+}
+
+
+.passwordForceContainer{
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+    margin-left: 10px;
+    position: relative;
+    transform: translateY(-5px);
+}
+
+.passwordForce{
+    display: flex;
+    margin: 5px 0px;
+    flex-direction: row;
+    gap: 5px;
+    width: 100%;
+    align-items: center;
+    justify-content: flex-start;
+}
+
+.passwordForce__line{
+    height: 4px;
+    width: 30px;
+    border-radius: 0px;
+    background-color: var(--detalhes);
+}
+
+.passwordForce__notify{
+    font-size: 12px;
+    color: var(--detalhes);
+}
+
+
+.toCadastroOptions{
+    animation: toCadastroOptions 700ms forwards;
+}
+
+@keyframes toCadastroOptions {
+    from{
+        height: 512px;
+        min-height: none;
+        max-width: 488px;
+    }
+    to{
+        height: 366px;
+        min-height: 366px;
+        max-width: 344px;
+    }
+}

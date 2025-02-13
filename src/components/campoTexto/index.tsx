@@ -2,23 +2,28 @@
 
 import { IMaskInput } from "react-imask";
 import styles from "./campoTexto.module.css"
+import { LuEye } from "react-icons/lu";
+import { LuEyeClosed } from "react-icons/lu";
+import { useState } from "react";
 
 interface inputTextProps { 
     placeholder?: string, 
     maxWidth?: string,
     maxHeigth?: string,
-    masked?: boolean | string,
+    type?: "normal" | "password" | "masked",
     text: string,
     onChange: (text:string) => void,
 }
 
-export default function CampoTexto({ placeholder, maxWidth, maxHeigth, text, onChange, masked = false }: inputTextProps) {
-
+export default function CampoTexto({ placeholder, maxWidth, maxHeigth, text, onChange, type = "normal" }: inputTextProps) {
+    
+    const [verSenha, setVerSenha] = useState<boolean>(false);
     const widthStyle = {maxWidth: maxWidth, maxHeight: maxHeigth};
 
     return (
-            masked 
-            ? <IMaskInput 
+        <>
+            {type == "masked" && 
+            <IMaskInput 
                 className={styles.campoTexto} 
                 style={{maxWidth: maxWidth, fontSize: "1rem", padding: "0", paddingRight: "12px", paddingLeft: "12px"}} 
                 type="text" 
@@ -28,14 +33,43 @@ export default function CampoTexto({ placeholder, maxWidth, maxHeigth, text, onC
                 placeholder="00000-000"
                 id="cep"
                 name="cep" 
-            /> 
-            : <input 
+            /> }
+            {type == "normal" && 
+            <input 
                 className={styles.campoTexto +" apper"} 
                 value={text}
                 onChange={(e: React.ChangeEvent<HTMLInputElement>) => onChange(e.target.value)} 
                 style={widthStyle} 
-                type="text" 
+                type="text"
                 placeholder={placeholder} 
-            />
+            />}
+            {type == "password" &&
+            <div className={styles.password}>
+                <input 
+                    className={styles.campoTexto +" apper"} 
+                    value={text}
+                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => onChange(e.target.value)} 
+                    style={widthStyle} 
+                    type={verSenha ? "text" : "password"}
+                    placeholder={placeholder}
+                />
+                <button 
+                    className={styles.eyeButton} 
+                    onClick={() => setVerSenha(!verSenha)}
+                    type="button"
+                >
+                    {verSenha 
+                    ? <LuEye 
+                        size={24} 
+                        color="var(--cor-primaria)" 
+                    /> 
+                    : <LuEyeClosed 
+                        size={24} 
+                        color="var(--cor-primaria)" 
+                    />}
+                </button>
+            </div>
+            }
+        </>
     )
 }

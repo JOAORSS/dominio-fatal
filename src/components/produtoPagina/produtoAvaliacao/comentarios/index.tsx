@@ -5,14 +5,17 @@ import styles from "./comentarios.module.css"
 import Button from "@/components/button"
 import Comentario from "./comentario"
 import { useState } from "react"
-import { useParams } from "next/navigation"
+import { useParams, useRouter } from "next/navigation"
 import postarComentario from "@/utils/comentar"
 import Warning from "../../produtoOpcoes/warning"
+import useUserContext from "@/hooks/useUserContext"
 
 export default function Comentarios({comentarios}:{ comentarios: {usuario: string, comentario:string}[]}) {
     const [comentario, setComentario] = useState<string>("")
     const [comentariosCli, setComentariosCli] = useState<{usuario: string, comentario:string}[]>(comentarios)
     const [warningComentario, setWarningComentario] = useState<boolean>(false);
+    const { usuario } = useUserContext();
+    const router = useRouter();
 
     const { id } = useParams();
     const idUse = typeof id === 'string' ? parseInt(id) : id;
@@ -24,18 +27,23 @@ export default function Comentarios({comentarios}:{ comentarios: {usuario: strin
                 <CampoTexto text={comentario} onChange={setComentario} placeholder="Escreva um comentário..." />
                 <Button 
                     onClick={async () => {
-                        if (typeof idUse === 'number' && comentario.length > 4) {
-                            const result = await postarComentario(idUse, "teste", comentario);
-                            if (result) {
-                                setComentariosCli(prevComentarios => [...prevComentarios, {usuario: "teste", comentario: comentario}]);
+                        if (usuario) {
+                            if (typeof idUse === 'number' && comentario.length > 4) {
+                                const result = await postarComentario(idUse, "teste", comentario)
+                                if (result) {
+                                    setComentariosCli(prevComentarios => [...prevComentarios, {usuario: "teste", comentario: comentario}])
+                                } 
+                                setWarningComentario(true)
                             }
                         } else {
-                            setWarningComentario(true);
-                        }}}
-                        type="outline" 
-                        maxWidht="174px" >
-                            Comentar
-                    </Button>
+                            router.push("/login")
+                        }
+                    }}
+                    type="outline" 
+                    maxWidht="174px"
+                >
+                    Comentar
+                </Button>
             </div>
             {warningComentario && <Warning close={() => setWarningComentario(false)} text="Erro ao postar comentario: é preciso no mínimo 3 letras" />}
             <div className={styles.ultimosComentario}>

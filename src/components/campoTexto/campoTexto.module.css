@@ -6,6 +6,29 @@
     align-items: center;
     gap: 10px;
     border-radius: 8px;
+    max-height: 40px;
     border: 2px solid var(--detalhes);
     box-sizing: border-box;
+}
+
+.password{
+    position: relative;
+    width: 100%;
+}
+
+.eyeButton{
+    background-color: #ffffff;
+    border: none;
+    cursor: pointer;
+    position: absolute;
+    right: 2;
+    top: 3;
+    height: 34px;
+    width: 34px;
+    margin-right: 2px !important;
+    display: flex;
+    box-sizing: border-box;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
 }
