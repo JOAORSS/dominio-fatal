@@ -3,9 +3,12 @@ import CategoriaCard from './categoriaCard';
 import styles from './categorias.module.css';
 import Categoria from '@/module/categoria';
 import SectionLabel from '../sectionLabel';
-import MockCategoria from '@/mock/mockCategorias.json';
 
-const categoria : Categoria = MockCategoria.categorias[0];
+const categoria : Categoria = {
+    "id": 1,
+    "nome": "Fitness",
+    "imagem": "/images/mockimages/categoriamock.jpg"
+};
 
 export default function Categorias() {
     return (

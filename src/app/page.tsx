@@ -1,12 +1,11 @@
 import BannerEstacao from "@/components/bannerEstacao";
 import Produto from "@/module/produto";
-import MockProdutos from "@/mock/mockProdutos.json";
 import Categorias from "@/components/categorias";
 import GradeProduto from "@/components/gradeProdutos";
 import DestaqueCarroselWrapper from "@/components/destaqueCarrosel";
 import PageLeyout from "@/components/pageLeyout";
 
-const produtos:Produto[] = MockProdutos;
+const produtos:Produto[] = [];
 
 export default function Home() {
   return (
