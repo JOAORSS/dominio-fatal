@@ -31,7 +31,7 @@ yarn-debug.log*
 yarn-error.log*
 .pnpm-debug.log*
 /src/mock
-/public/images/mockimages
+# /public/images/mockimages
 # env files (can opt-in for committing if needed)
 .env*
 
