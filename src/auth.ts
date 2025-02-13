@@ -25,7 +25,13 @@ export const {
             clientId: process.env.FACEBOOK_CLIENT_ID,
             clientSecret: process.env.FACEBOOK_CLIENT_SECRET,
 
-
-        })
+            authorization: {
+                params: {
+                    access_type: "offline",
+                    prompt: "consent",
+                    response_type: "code",
+                }
+            }
+                    })
     ]
 })
