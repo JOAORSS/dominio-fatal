@@ -82,7 +82,7 @@ export default function FormLogin(){
                                 +" apper "+ 
                                 (out && "desapper")
                             }
-                        >Conecte com<br/>Google ou Instagram!
+                        >Conecte com<br/>Google ou Facebook!
                         </h2>
                         <button 
                             type="submit"
@@ -98,13 +98,13 @@ export default function FormLogin(){
                         <button 
                             type="submit"
                             name="action"
-                            value="instagram"
+                            value="facebook"
                             className={
                                 styles.icon 
                                 +" apper "+ 
                                 (out && "desapper")
                                 }
-                        >Entrar com Instagram <div className={styles.instagram}> <SiInstagram size={24} color="#fff" /> </div>
+                        >Entrar com Facebook <div className={styles.instagram}> <SiInstagram size={24} color="#fff" /> </div>
                         </button>
                     </form>
                 </section>
