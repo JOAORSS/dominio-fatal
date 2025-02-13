@@ -58,7 +58,7 @@ export default function ProdutoOpcoes({ produto } : { produto: Produto }) {
     }, [warningFrete]);
 
 
-    const { adicionarUmProdutoCarrinho, carrinho } = useCarrinhoContext();
+    const { carrinho } = useCarrinhoContext();
 
     const tamanhos = consolidarTamanho(produto.cores);
     const cores = consolidarCores(produto.cores);
@@ -130,7 +130,8 @@ export default function ProdutoOpcoes({ produto } : { produto: Produto }) {
                     onClick={() => 
                         usuario 
                         ? (validaPropsCarrinho(tamanhoSelecionado, corSelecionada) 
-                            ? (adicionarUmProdutoCarrinho(produto, corSelecionada, tamanhoSelecionado))
+                            // ? (adicionarUmProdutoCarrinho(produto, corSelecionada, tamanhoSelecionado))
+                            ? console.log("adicionado")
                             : setWarningCarrinho(true))
                         : router.push("/login")
                     } 
