@@ -1,21 +1,12 @@
-"use client"
-
 import Image from "next/image"
 import styles from "../../perfil.module.css"
-import { useEffect, useState } from "react";
 import { auth } from "@/auth";
 
 // colocar as infos do usuario corretamente (props)
 
 export default async function Usuario() {
 
-    const [session, setSession] = useState(null);
-
-    useEffect(() => {
-        auth().then(sessionData => {
-            setSession(sessionData);
-        });
-    }, []);
+    const session = await auth();
 
     return(
         <div>
