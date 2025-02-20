@@ -23,6 +23,9 @@
     align-items: center;
     justify-content: space-between;
     padding: 0px;
+    &:hover{
+        outline: 2px solid var(--detalhes);
+    }
 }
 
 .configBoxContent{

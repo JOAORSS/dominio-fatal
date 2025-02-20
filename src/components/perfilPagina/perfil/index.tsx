@@ -11,8 +11,7 @@ export default function PerfilPerfil() {
                 <Endereco />
                 <div>
                     <h3 className={styles.infoBoxLabel}>Cartões</h3>
-                    <Cartao />
-                    <Cartao />
+                    <Cartao adicionar />
                 </div>
         </section>
     )

@@ -20,8 +20,7 @@ export default async function Usuario() {
                     className={styles.imagemUsuario}
                     src={image!}
                     alt="imagem do usuario"
-                    width={200}
-                    height={200}
+                    fill
                 />
                 <div className={styles.perfilInfo}>
                     <h3 className={styles.nome}>{name!}</h3>
