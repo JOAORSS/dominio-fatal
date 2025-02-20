@@ -1,16 +1,20 @@
 import Image from "next/image"
 import styles from "../../perfil.module.css"
+import { useSessionContext } from "@/context/testProvider"
 
 // colocar as infos do usuario corretamente (props)
 
 export default function Usuario() {
+
+    const session = useSessionContext()
+
     return(
         <div>
             <h3 className={styles.infoBoxLabel}>Usuario</h3>
             <div className={styles.infoBox}>
                 <Image 
                     className={styles.imagemUsuario}
-                    src="/images/usuario.png"
+                    src={session?.user?.image}
                     alt="imagem do usuario"
                     width={100}
                     height={100}

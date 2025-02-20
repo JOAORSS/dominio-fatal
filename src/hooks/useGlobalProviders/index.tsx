@@ -1,14 +1,14 @@
 import { CarrinhoProvider } from "@/context/carrinhoContext";
-import { UserProvider } from "@/context/userContext";
+import { UserSessionProvider } from "@/context/testProvider";
 
 export default function UseGlobalProviders({ children }: { children: React.ReactNode }) {
 
     return(
-        <UserProvider>
+        <UserSessionProvider>
             <CarrinhoProvider>
                 {children}
             </CarrinhoProvider>
-        </UserProvider>
+        </UserSessionProvider>
     )
     
 }
