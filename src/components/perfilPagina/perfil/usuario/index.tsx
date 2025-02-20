@@ -8,7 +8,9 @@ import { useSessionContext } from "@/context/testProvider"
 
 export default function Usuario() {
 
-    const session = useSessionContext()
+    const session = useSessionContext();
+
+    console.log(session);
 
     return(
         <div>
