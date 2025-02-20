@@ -1,3 +1,5 @@
+"use client"
+
 import Image from "next/image"
 import styles from "../../perfil.module.css"
 import { useSessionContext } from "@/context/testProvider"
