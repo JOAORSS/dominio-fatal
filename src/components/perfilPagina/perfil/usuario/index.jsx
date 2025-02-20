@@ -2,15 +2,23 @@
 
 import Image from "next/image"
 import styles from "../../perfil.module.css"
-import { useSessionContext } from "@/context/testProvider"
+import { useEffect, useState } from "react";
+import { auth } from "@/auth";
 
 // colocar as infos do usuario corretamente (props)
 
 export default function Usuario() {
 
-    const session = useSessionContext();
+    const [session, setSession] = useState(null);
 
-    console.log(session);
+    useEffect(() => {
+        const fetchSession = async () => {
+            const sessionData = await auth();
+            setSession(sessionData);
+        };
+
+        fetchSession();
+    }, []);
 
     return(
         <div>
