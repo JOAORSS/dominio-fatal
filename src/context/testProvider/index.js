@@ -1,21 +1,13 @@
 "use client"
 
-import { createContext, useContext, useState, useEffect } from 'react';
+import { createContext, useContext,  } from 'react';
 
 const SessionContext = createContext();
 import { auth } from "@/auth";
 
-export const UserSessionProvider = ({ children }) => {
-    const [session, setSession] = useState(null);
+export const UserSessionProvider = async ({ children }) => {
 
-    useEffect(() => {
-        const fetchSession = async () => {
-            const sessionData = await auth();
-            setSession(sessionData);
-        };
-
-        fetchSession();
-    }, []);
+    const session = await auth();
 
     return (
         <SessionContext.Provider value={session}>
