@@ -23,7 +23,7 @@ export default function Cartao({ adicionar }: { adicionar?: boolean }) {
                 <button className={styles.infoBox}>
                     <IoIosAddCircle size={60} color="var(--detalhes)" />
                     <div className={styles.perfilInfo}>
-                        <h3 className={styles.nome}>Adicionar Cartão</h3>
+                        <h3 className={styles.nome} style={{color: "var(--detalhes)"}}>Adicionar Cartão</h3>
                     </div>
                 </button>
             )

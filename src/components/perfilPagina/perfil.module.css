@@ -23,9 +23,6 @@
     align-items: center;
     justify-content: space-between;
     padding: 0px;
-    &:hover{
-        outline: 2px solid var(--detalhes);
-    }
 }
 
 .configBoxContent{
@@ -92,14 +89,19 @@
     align-self: stretch;
     border-radius: 17px;
     background: var(--background-interno);
+    outline: none;
+    &:hover{
+        outline: 2px solid var(--detalhes);
+    }
 }
 
 /* usuario */
 
 .imagemUsuario{
-    width: 70px;
-    height: 70px;
-    border-radius: 70px;
+    box-sizing: border-box;
+    width: 65px;
+    height: 65px;
+    border-radius: 50px;
     border: 3px solid var(--cor-primaria) !important;
 }
 
