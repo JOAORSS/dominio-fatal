@@ -5,7 +5,11 @@ const nextConfig: NextConfig = {
     remotePatterns: [
       {
         protocol: 'https',
-        hostname: 'instagram.fpoa2-1.fna.fbcdn.net',
+        hostname: 'instagram.fpoa2-1.fna.fbcdn.net'
+      },
+      {
+        protocol: 'https',
+        hostname: 'lh3.googleusercontent.com'
       },
     ],
   },
