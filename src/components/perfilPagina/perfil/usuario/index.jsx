@@ -7,17 +7,14 @@ import { auth } from "@/auth";
 
 // colocar as infos do usuario corretamente (props)
 
-export default function Usuario() {
+export default async function Usuario() {
 
     const [session, setSession] = useState(null);
 
     useEffect(() => {
-        const fetchSession = async () => {
-            const sessionData = await auth();
+        auth().then(sessionData => {
             setSession(sessionData);
-        };
-
-        fetchSession();
+        });
     }, []);
 
     return(
