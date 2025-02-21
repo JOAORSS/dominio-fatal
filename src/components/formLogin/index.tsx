@@ -104,7 +104,7 @@ export default function FormLogin(){
                         +" apper "+ 
                         (out && "desapper")
                         }
-                >Entrar com Facebook<FaFacebook size={34} color="#1877f2" />
+                >Entrar com facebook<FaFacebook size={34} color="#1877f2" />
                 </button>
             </form>
         </section>

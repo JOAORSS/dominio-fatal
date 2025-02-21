@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import styles from "./cadastro.module.css";
-import { SiInstagram } from "react-icons/si";
+import { FaFacebook } from "react-icons/fa";
 
 interface CadastroPageProps {
     toForm: boolean;
@@ -61,7 +61,7 @@ export default function CadastroOptions({ toForm, setToForm, setCadastroToggle }
                             (out && "desapper")
                         }
                     >
-                        Cadastrar com Instagram<div className={styles.instagram}> <SiInstagram size={24} color="#fff" /> </div>
+                        Cadastrar com facebook<FaFacebook size={34} color="#1877f2" />
                     </button>
                 </div>             
                 <Link 

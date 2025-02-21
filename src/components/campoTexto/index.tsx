@@ -57,7 +57,7 @@ export default function CampoTexto({ placeholder, maxWidth, maxHeigth, text, onC
                     className={styles.eyeButton} 
                     onClick={() => setVerSenha(!verSenha)}
                     type="button"
-                    style={{position: 'absolute', right: "10",top: "8"}}
+                    style={{position: 'absolute', right: "10px",top: "8px"}}
                 >
                     {verSenha 
                     ? <LuEye 
