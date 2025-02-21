@@ -5,6 +5,8 @@ import "@/animations/animations.css";
 import Rodape from "@/components/rodape";
 import Cabecalho from "@/components/cabecalho";
 import UseGlobalProviders from "@/hooks/useGlobalProviders";
+import { SessionProvider } from "next-auth/react";
+import { auth } from "@/auth";
 
 const raleway = Raleway({
   subsets: ["latin"],
@@ -31,19 +33,23 @@ export const metadata: Metadata = {
   },  
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const session = await auth();
+
   return (
     <html lang="pt-BR" className={`global ${raleway.variable} ${juliusSansOne.variable}`}>
       <body>
-        <UseGlobalProviders>
-          <Cabecalho />
-          {children}
-          <Rodape />
-        </UseGlobalProviders>
+        <SessionProvider session={session}>
+          <UseGlobalProviders>
+            <Cabecalho />
+            {children}
+            <Rodape />
+          </UseGlobalProviders>
+        </SessionProvider>
       </body>
     </html>
   );

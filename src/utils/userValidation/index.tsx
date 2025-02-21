@@ -1,9 +1,9 @@
-import { auth } from "@/auth";
+import { useSession } from "next-auth/react";
 import { redirect } from "next/navigation";
 
-export default async function Authorization({ children }: { children: React.ReactNode }) {
+export default function Authorization({ children }: { children: React.ReactNode }) {
 
-    const session = await auth();
+    const { data: session } = useSession();
 
     if (!session?.user) redirect("/login"); 
 

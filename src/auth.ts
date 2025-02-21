@@ -1,6 +1,8 @@
 import NextAuth from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
 import FacebookProvider from "next-auth/providers/facebook";
+import supabase from "./lib/supabase/client";
+import { SupabaseAdapter } from "@auth/supabase-adapter";
 
 export const {
     handlers: { GET, POST },
@@ -42,5 +44,28 @@ export const {
                 };
             },
         }),
-    ]
+    ],
+    adapter: SupabaseAdapter({
+        url: process.env.NEXT_PUBLIC_SUPABASE_URL!,
+        secret: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+    }),
+    callbacks: {
+        async session(params) {
+          // Adiciona informações do usuário à sessão
+          const { data } = await supabase
+            .from('users')
+            .select('*')
+            .eq('id', params.user.id)
+            .single();
+    
+          if (data) {
+            params.session.user = {
+              ...params.session.user,
+              ...data,
+            };
+          }
+    
+          return params.session;
+        },
+      },
 })
