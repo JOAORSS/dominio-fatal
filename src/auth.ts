@@ -30,8 +30,17 @@ export const {
                     access_type: "offline",
                     prompt: "consent",
                     response_type: "code",
+                    scope: "email public_profile",
                 }
-            }
-        })
+            },
+            profile(profile) {
+                return {
+                    id: profile.id,
+                    name: profile.name || profile.first_name + " " + profile.last_name,
+                    email: profile.email,
+                    image: profile.picture?.data?.url || "/images/user.svg",
+                };
+            },
+        }),
     ]
 })
