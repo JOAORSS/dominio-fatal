@@ -60,10 +60,12 @@ export default function CampoTexto({ placeholder, maxWidth, maxHeigth, text, onC
                 >
                     {verSenha 
                     ? <LuEye 
+                        style={{position: "absolute", right: "2px", left: "2px"}}
                         size={24} 
                         color="var(--cor-primaria)" 
                     /> 
                     : <LuEyeClosed 
+                        style={{position: "absolute", right: "2px", left: "2px"}}
                         size={24} 
                         color="var(--cor-primaria)" 
                     />}

@@ -127,6 +127,7 @@
     transition: 200ms;
     &:hover{
         border-color: var(--cor-primaria);
+        background-color: rgba(0,0,0,0.04);
     }
     &:active{
         transition: 200ms;
