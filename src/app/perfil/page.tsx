@@ -9,13 +9,13 @@ export default function Perfil(){
     return (
         <Authorization>
             <div className={styles.perfil}>
-            <Container>
-                <div className={styles.perfilContainer}>
-                    <PerfilPerfil />
-                    <PerfilConfig />
-                </div>
-            </Container>
-        </div>
+                <Container>
+                    <div className={styles.perfilContainer}>
+                        <PerfilPerfil />
+                        <PerfilConfig />
+                    </div>
+                </Container>
+            </div>
         </Authorization>
     );
 }

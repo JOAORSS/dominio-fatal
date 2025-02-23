@@ -2,7 +2,6 @@ import Image from "next/image"
 import styles from "../../perfil.module.css"
 import { auth } from "@/auth";
 
-// colocar as infos do usuario corretamente (props)
 
 export default async function Usuario() {
 
