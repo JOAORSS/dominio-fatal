@@ -90,6 +90,7 @@
     border-radius: 17px;
     background: var(--background-interno);
     outline: none;
+    border: none;
 }
 
 /* usuario */
@@ -162,8 +163,19 @@
 }
 
 .adicionar{
-    outline: none;    
+    outline: 1px solid var(--detalhes);
+    transition: 200ms;
+    box-sizing: border-box;
+    padding: 0px 20px;
+    cursor: pointer;
     &:hover{
-        outline: 2px solid var(--detalhes);
+        transition: 200ms;
+        background-color: rgba(0, 0, 0, 0.06);
+        color: var(--background-interno);
+    }
+    &:active{
+        transition: 200ms;
+        background-color: rgba(0, 0, 0, 0.12);
+        color: var(--background-interno);
     }
 }

@@ -4,7 +4,7 @@ interface EnderecoType {
     bairro: string;
     logradouro?: string;
     rua: string;
-    CEP: number;
+    cep: number;
     local: 'residencia' | 'apartamento' | 'trabalho' | 'correios';
     numero: number;
 }

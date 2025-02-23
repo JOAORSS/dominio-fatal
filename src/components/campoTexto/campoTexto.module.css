@@ -11,6 +11,10 @@
     box-sizing: border-box;
 }
 
+.erro{
+    border-color: #e04c4c;
+}
+
 .password{
     position: relative;
     width: 100%;

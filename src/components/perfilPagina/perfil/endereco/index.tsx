@@ -1,6 +1,7 @@
-import { fetchDataEndereco } from "@/services/supabase";
+import fetchDataEndereco from "@/services/supabase/selectEnderecos";
 import styles from "../../perfil.module.css"
-// import { auth } from "@/auth";
+import { auth } from "@/auth";
+import { IoIosAddCircle } from "react-icons/io";
 
 function EnderecoCampo({label, valor} : {label: string, valor: string}) {
     return(
@@ -11,27 +12,37 @@ function EnderecoCampo({label, valor} : {label: string, valor: string}) {
     )
 }
 
-
 export default async function Endereco() {
 
-    // const session = await auth();
-    // const email = session?.user?.email
-    const endereco = await fetchDataEndereco();
+    const session = await auth();
+    const email = session?.user?.email
+    const enderecoArray = await fetchDataEndereco(email!);
+    const endereco = enderecoArray[0];
 
     return(
-        endereco.length > 0 ?(
         <div>
             <h3 className={styles.infoBoxLabel}>Endereco</h3>
-            <div className={styles.infoBox +" "+ styles.infoBoxEndereco}>
-                    <EnderecoCampo label="Estado" valor={endereco[0].estado ? endereco[0].estado : "-"}/>
-                    <EnderecoCampo label="Cidade" valor={endereco[0].cidade ? endereco[0].cidade : "-"}/>
-                    <EnderecoCampo label="Bairro" valor={endereco[0].bairro ? endereco[0].bairro : "-"}/>
-                    <EnderecoCampo label="Rua" valor={endereco[0].rua ? endereco[0].rua : "-"}/>                    
-                    <EnderecoCampo label="CEP" valor={endereco[0].CEP ? String(endereco[0].CEP) : "-"}/>
-                    <EnderecoCampo label="Local" valor={endereco[0].local ? endereco[0].local : "-"}/>
-                    <EnderecoCampo label="Número" valor={endereco[0].numero ? String(endereco[0].numero) : "-"}/>
-            </div>
-        </div>)
-        : <></>
+            {enderecoArray.length > 0 
+            ?(
+                <div className={styles.infoBox +" "+ styles.infoBoxEndereco}>
+                    <EnderecoCampo label="Estado" valor={endereco.estado ? endereco.estado : "-"}/>
+                    <EnderecoCampo label="Cidade" valor={endereco.cidade ? endereco.cidade : "-"}/>
+                    <EnderecoCampo label="Bairro" valor={endereco.bairro ? endereco.bairro : "-"}/>
+                    <EnderecoCampo label="Rua" valor={endereco.rua ? endereco.rua : "-"}/>                    
+                    <EnderecoCampo label="CEP" valor={endereco.cep ? String(endereco.cep) : "-"}/>
+                    <EnderecoCampo label="Local" valor={endereco.local ? endereco.local : "-"}/>
+                    <EnderecoCampo label="Número" valor={endereco.numero ? String(endereco.numero) : "-"}/>
+                </div>
+            ): 
+            <button 
+                className={styles.infoBox +" "+ styles.adicionar}
+                style={{marginLeft: "20px", marginTop: "10px"}}
+            >
+                <IoIosAddCircle size={50} color="var(--detalhes)" />
+                <div className={styles.perfilInfo}>
+                    <h3 className={styles.nome} style={{color: "var(--detalhes)"}}>Adicionar endereço</h3>
+                </div>
+            </button>}
+        </div>
     )
 }

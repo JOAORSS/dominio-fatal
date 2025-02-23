@@ -10,14 +10,28 @@ interface inputTextProps {
     placeholder?: string, 
     maxWidth?: string,
     maxHeigth?: string,
+    inputName?: string,
     type?: "normal" | "password" | "masked",
     text: string,
+    validation?: () => boolean,
     onChange: (text:string) => void,
 }
 
-export default function CampoTexto({ placeholder, maxWidth, maxHeigth, text, onChange, type = "normal" }: inputTextProps) {
+export default function CampoTexto(
+    { 
+        placeholder,
+        inputName,
+        maxWidth, 
+        maxHeigth, 
+        text, 
+        validation, 
+        onChange, 
+        type = "normal" 
+    }
+        : inputTextProps) {
     
     const [verSenha, setVerSenha] = useState<boolean>(false);
+    const [erro, setErro] = useState<boolean>(false);
     const widthStyle = {maxWidth: maxWidth, maxHeight: maxHeigth};
 
     return (
@@ -36,19 +50,35 @@ export default function CampoTexto({ placeholder, maxWidth, maxHeigth, text, onC
             /> }
             {type == "normal" && 
             <input 
-                className={styles.campoTexto +" apper"} 
+                className={styles.campoTexto +" apper " + (erro && styles.erro)} 
                 value={text}
                 onChange={(e: React.ChangeEvent<HTMLInputElement>) => onChange(e.target.value)} 
-                style={widthStyle} 
+                style={widthStyle}
+                name={inputName}
                 type="text"
                 placeholder={placeholder} 
+                onBlur={() => {
+                    if (validation && validation()) {
+                        setErro(true);
+                    } else {
+                        setErro(false);
+                    }
+                }}
             />}
             {type == "password" &&
             <div className={styles.password}>
                 <input 
-                    className={styles.campoTexto +" apper"} 
+                    className={styles.campoTexto +" apper " + (erro && styles.erro)} 
                     value={text}
-                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => onChange(e.target.value)} 
+                    name={inputName}
+                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => onChange(e.target.value)}
+                    onBlur={() => {
+                        if (validation && validation()) {
+                            setErro(true);
+                        } else {
+                            setErro(false);
+                        }
+                    }}
                     style={widthStyle} 
                     type={verSenha ? "text" : "password"}
                     placeholder={placeholder}

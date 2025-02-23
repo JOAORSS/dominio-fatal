@@ -6,6 +6,8 @@ import { FaArrowLeft } from "react-icons/fa6";
 import Button from "../../button";
 import { useEffect, useState } from "react";
 import zxcvbn from 'zxcvbn';
+import cadastroValidation from "@/utils/cadastroValidation";
+import createUser from "@/services/supabase/createUser";
 
 interface FormCadastroProps { 
     setCadastroToggle: (value: boolean) => void 
@@ -37,7 +39,25 @@ export default function FormCadastro({ setCadastroToggle } : FormCadastroProps) 
     }, [senha, setSenha]);
 
     return(
-        <form className={styles.container +" "+ (toCadastroOptions && styles.toCadastroOptions)}>
+        <form 
+            className={styles.container +" "+ 
+                (toCadastroOptions && styles.toCadastroOptions)}
+            onSubmit={async (e) => {
+                e.preventDefault();
+                if (cadastroValidation({
+                    nome,
+                    sobrenome,
+                    email,
+                    senha,
+                    scoreSenha,
+                    confirmarSenha,
+                })) {
+                    const formData = new FormData(e.currentTarget as HTMLFormElement);
+                    await createUser(formData);
+                }
+            }}
+            id="formCadastro"
+        >
             <button 
                 className={styles.backArrow +" apper "+ (out && "desapper")} 
                 onClick={async () => {
@@ -66,7 +86,9 @@ export default function FormCadastro({ setCadastroToggle } : FormCadastroProps) 
                         <label>Nome</label>
                         <CampoTexto 
                             text={nome} 
-                            onChange={setNome} 
+                            inputName="nome"
+                            onChange={setNome}
+                            validation={() => nome.length < 3}
                             placeholder="João Vitor" 
                         />
                     </div>
@@ -74,7 +96,9 @@ export default function FormCadastro({ setCadastroToggle } : FormCadastroProps) 
                         <label>Sobrenome</label>
                         <CampoTexto 
                             text={sobrenome} 
-                            onChange={setSobrenome} 
+                            inputName="sobrenome"
+                            onChange={setSobrenome}
+                            validation={() => sobrenome.length < 3}
                             placeholder="Pereira de Palma" 
                         />
                     </div>
@@ -83,16 +107,20 @@ export default function FormCadastro({ setCadastroToggle } : FormCadastroProps) 
                     <label>Email</label>
                     <CampoTexto 
                         text={email} 
-                        onChange={setEmail} 
+                        inputName="email"
+                        onChange={setEmail}
+                        validation={() => (email.length < 3 || !email.includes("@") || !email.includes("."))}
                         placeholder="exemeploDeEmail@email.com" 
                     />
                 </div>
                 <div className={styles.cadastro__container}>
                     <label>Senha</label>
                     <CampoTexto 
-                        type="password" 
+                        type="password"
+                        inputName="senha" 
                         text={senha} 
                         onChange={setSenha} 
+                        validation={() => senha.length < 3 || scoreSenha < 2}
                         placeholder="Sua senha aqui" 
                     />
                     {scoreSenha 
@@ -121,8 +149,10 @@ export default function FormCadastro({ setCadastroToggle } : FormCadastroProps) 
                     <label>Confirme sua senha</label>
                     <CampoTexto 
                         type="password" 
-                        text={confirmarSenha} 
+                        text={confirmarSenha}
+                        inputName="confirmarSenha"
                         onChange={setConfirmarSenha} 
+                        validation={() => confirmarSenha !== senha}
                         placeholder="Confirme sua senha" 
                     />
                 </div>
@@ -131,13 +161,14 @@ export default function FormCadastro({ setCadastroToggle } : FormCadastroProps) 
                 style={{
                     alignSelf: "center", 
                     width: "436px"}
-                    } 
-                className={(out ? "desapper" : "")}
-            >
-                <Button maxWidht="438px" type="full">Cadastrar</Button>
+                    } >
+                <Button 
+                    onClick={() => (document.getElementById('formCadastro') as HTMLFormElement)?.requestSubmit()}
+                    maxWidht="438px"
+                    type="full"
+                >Cadastrar
+                </Button>
             </div>
         </form>
     )
 }
-
-// precisa ser maoir q 1 o score

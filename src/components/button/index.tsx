@@ -4,7 +4,7 @@ import styles from "./button.module.css"
 interface ButtonProps {
     children: React.ReactNode;
     type: "full" | "outline" | "filled";
-    onClick?: () => void;
+    onClick?: (event?: React.MouseEvent<HTMLButtonElement | HTMLAnchorElement, MouseEvent>) => void;
     maxWidht?: string;
     destaque?: boolean;
     link?: string;

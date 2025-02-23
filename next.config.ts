@@ -15,9 +15,8 @@ const nextConfig: NextConfig = {
         protocol: "https",
         hostname: "platform-lookaside.fbsbx.com",
         port: "",
-        pathname: "/**", // Permite todas as rotas desse domínio
+        pathname: "/**",
       },
-      // Instagram (caso o perfil esteja vinculado ao Instagram)
       {
         protocol: "https",
         hostname: "scontent.cdninstagram.com",
