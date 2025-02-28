@@ -10,7 +10,6 @@ import { auth } from "@/auth"
 export default async function Cabecalho() {
 
     const session = await auth();
-        
 
     return(
             <header className={styles.cabecalho__container}>
@@ -27,10 +26,10 @@ export default async function Cabecalho() {
                         </Link>
                         <Search />
                         <nav className={styles.nav}>
-                            <Link href={session?.user ? "/perfil" : "/login"}>
+                            <Link href={session != null ? "/perfil" : "/login"}>
                                 <RiUserLine size={50} color="#FFFF" />
                             </Link>
-                            <Link href={session?.user ? "/sacola" : "/login"}>
+                            <Link href={session != null ? "/sacola" : "/login"}>
                                 <BsFillHandbagFill size={50} color="#FFF" />
                             </Link>
                         </nav>

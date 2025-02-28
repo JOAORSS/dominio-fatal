@@ -1,5 +1,11 @@
+import styles from "./loading.module.css"
+
 export default function LoadingPage(){
     return(
-        <div className="loading" />
+        <>
+            <div className={"blackout"} />
+            <div className={styles.loading + " loading"} />
+        </>
+
     )
 }

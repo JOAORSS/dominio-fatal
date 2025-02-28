@@ -3,11 +3,13 @@ import styles from "./formLogin.module.css"
 import Link from "next/link";
 import { FcGoogle } from "react-icons/fc";
 import { FaFacebook } from "react-icons/fa";
-import { redirect } from "next/navigation";
+import { redirect, useRouter } from "next/navigation";
 import { useState } from "react";
-import { doSocialLogin } from "@/services/auth/actions";
+import { doCredentialLogin, doSocialLogin } from "@/services/auth/actions";
 import Button from "@/components/button";
 import CampoTexto from "@/components/campoTexto";
+import Warning from "../produtoPagina/produtoOpcoes/warning";
+import LoadingPage from "../loading";
 
 export default function FormLogin(){
 
@@ -15,6 +17,28 @@ export default function FormLogin(){
     const [senha, setSenha] = useState("");
     const [toCadastro, setToCadastro] = useState(false);
     const [out, setOut] = useState(false);
+    const [warningCredentials, setWarningCredentials] = useState<string | boolean>(false);
+    const [loading, setLoading] = useState(false);
+    
+    const router = useRouter();
+
+    async function handleFormSubmit(e: React.FormEvent<HTMLFormElement>) {
+        e.preventDefault()
+        try{
+            const formData = new FormData(e.currentTarget);
+            const response = await doCredentialLogin(formData);
+
+            if (!!response.error) {
+                setWarningCredentials(response.error.message);
+            } else {
+                router.push("/");
+                router.refresh();
+            }
+
+        } catch(error){
+            if (error) setWarningCredentials("Considere checar se o email ou senha estão incorretos")
+        }
+    }
 
     return(
         <section 
@@ -24,32 +48,39 @@ export default function FormLogin(){
                 && styles.toCadastro)
                 }
             >
-            <form 
+            <form
+                onSubmit={handleFormSubmit}
+                style={{marginLeft: "40px"}}
                 className={
                     styles.login 
                     +" apper "+ 
                     (out && "desapper")
                 } 
-                style={{marginLeft: "40px"}}>
+            >
                 <h2 className={styles.texto}>Faça login com sua conta!</h2>
                 <CampoTexto 
                     text={email} 
                     onChange={setEmail} 
+                    validation={() => (email.length < 3 || !email.includes("@") || !email.includes("."))}
                     placeholder="ExemploDeConta@email.com" 
+                    inputName="email"
                     maxHeigth="40px" 
                     maxWidth="296px"
                 />
                 <CampoTexto 
                     type="password" 
-                    text={senha} 
-                    onChange={setSenha} 
+                    text={senha}
+                    onChange={setSenha}
+                    validation={() => senha.length < 3}
+                    inputName="senha"
                     placeholder="***********" 
                     maxHeigth="40px" 
                     maxWidth="296px" 
                 />
                 <Button 
-                    maxWidht="296px" 
+                    maxWidht="296px"
                     type="outline"
+                    onClick={() => setLoading(true)}
                 >Entrar
                 </Button>
             </form>
@@ -107,6 +138,8 @@ export default function FormLogin(){
                 >Entrar com facebook<FaFacebook size={34} color="#1877f2" />
                 </button>
             </form>
+            {loading && <LoadingPage />}
+            {warningCredentials && <Warning close={() => setWarningCredentials(false)} text={String(warningCredentials)} />}
         </section>
     )
 }

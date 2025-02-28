@@ -64,12 +64,21 @@
     }   
 }
 
+@keyframes blackinOut {
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
+    
+}
 
 .loading{
     width: 56px;
     height: 56px;
     border-radius: 50%;
-    border: 9px solid #6c2c79;
+    border: 9px solid #FFFFFF;
     animation: spinner-bulqg1 0.8s infinite linear alternate, spinner-oaa3wk 1.6s infinite linear;
  }
 

@@ -30,9 +30,9 @@ export default function CampoTexto(
     }
         : inputTextProps) {
     
-    const [verSenha, setVerSenha] = useState<boolean>(false);
+    const widthStyle = {maxWidth: maxWidth || "", maxHeight: maxHeigth || ""};
     const [erro, setErro] = useState<boolean>(false);
-    const widthStyle = {maxWidth: maxWidth, maxHeight: maxHeigth};
+
 
     return (
         <>
@@ -65,44 +65,83 @@ export default function CampoTexto(
                     }
                 }}
             />}
-            {type == "password" &&
-            <div className={styles.password}>
-                <input 
-                    className={styles.campoTexto +" apper " + (erro && styles.erro)} 
-                    value={text}
-                    name={inputName}
-                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => onChange(e.target.value)}
-                    onBlur={() => {
-                        if (validation && validation()) {
-                            setErro(true);
-                        } else {
-                            setErro(false);
-                        }
-                    }}
-                    style={widthStyle} 
-                    type={verSenha ? "text" : "password"}
-                    placeholder={placeholder}
+            {type == "password" && 
+                <SenhaCampo 
+                    text={text} 
+                    onChange={onChange} 
+                    erro={erro} 
+                    setErro={setErro} 
+                    placeholder={placeholder!}
+                    validation={validation!}
+                    inputName={inputName!} 
+                    widthStyle={widthStyle} 
                 />
-                <button 
-                    className={styles.eyeButton} 
-                    onClick={() => setVerSenha(!verSenha)}
-                    type="button"
-                    style={{position: 'absolute', right: "10px",top: "8px"}}
-                >
-                    {verSenha 
-                    ? <LuEye 
-                        style={{position: "absolute", right: "2px", left: "2px"}}
-                        size={24} 
-                        color="var(--cor-primaria)" 
-                    /> 
-                    : <LuEyeClosed 
-                        style={{position: "absolute", right: "2px", left: "2px"}}
-                        size={24} 
-                        color="var(--cor-primaria)" 
-                    />}
-                </button>
-            </div>
             }
         </>
     )
 }
+
+
+function SenhaCampo(
+    {
+        text,
+        inputName,
+        placeholder,
+        validation,
+        onChange, 
+        widthStyle,
+        erro,
+        setErro,
+    } : 
+    {
+        text: string, 
+        inputName: string,
+        placeholder: string,
+        validation: () => boolean,
+        onChange: (text: string) => void, 
+        widthStyle?: {maxWidth: string, maxHeight: string},
+        erro: boolean,
+        setErro: (erro: boolean) => void
+    }
+    ){
+        const [verSenha, setVerSenha] = useState<boolean>(false);
+
+        return(
+            <div className={styles.password}>
+            <input 
+                className={styles.campoTexto +" apper " + (erro && styles.erro)} 
+                value={text}
+                name={inputName}
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) => onChange(e.target.value)}
+                onBlur={() => {
+                    if (validation && validation()) {
+                        setErro(true);
+                    } else {
+                        setErro(false);
+                    }
+                }}
+                style={widthStyle} 
+                type={verSenha ? "text" : "password"}
+                placeholder={placeholder}
+            />
+            <button 
+                className={styles.eyeButton} 
+                onClick={() => setVerSenha(!verSenha)}
+                type="button"
+                style={{position: 'absolute', right: "10px",top: "8px"}}
+            >
+                {verSenha 
+                ? <LuEye 
+                    style={{position: "absolute", right: "2px", left: "2px"}}
+                    size={24} 
+                    color="var(--cor-primaria)" 
+                /> 
+                : <LuEyeClosed 
+                    style={{position: "absolute", right: "2px", left: "2px"}}
+                    size={24} 
+                    color="var(--cor-primaria)" 
+                />}
+            </button>
+        </div>
+        )
+    }

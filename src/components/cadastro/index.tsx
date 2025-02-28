@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import styles from "./cadastro.module.css";
 import { FaFacebook } from "react-icons/fa";
+import { doSocialLogin } from "@/services/auth/actions";
 
 interface CadastroPageProps {
     toForm: boolean;
@@ -20,7 +21,11 @@ export default function CadastroOptions({ toForm, setToForm, setCadastroToggle }
     const router = useRouter();
 
     return(
-        <section className={styles.container +" "+ (toLogin && styles.toLogin) +" "+ (toForm && styles.toForm)}>
+        <section className={
+            styles.container +" "+ 
+            (toLogin && styles.toLogin) +" "+ 
+            (toForm && styles.toForm)}
+        >
             {!toLogin 
             ? <>
                 <h2 className={
@@ -47,22 +52,31 @@ export default function CadastroOptions({ toForm, setToForm, setCadastroToggle }
                     >
                         Cadastrar na domínio fatal
                     </Button>
-                    <button className={
-                            styles.buttons 
-                            +" apper "+ 
-                            (out && "desapper")
-                        }
-                    >
-                        Cadastrar com google<FcGoogle size={34} />
-                    </button>
-                    <button className={
-                            styles.buttons 
-                            +" apper "+ 
-                            (out && "desapper")
-                        }
-                    >
-                        Cadastrar com facebook<FaFacebook size={34} color="#1877f2" />
-                    </button>
+                    <form action={doSocialLogin} >
+                        <button 
+                            className={
+                                styles.buttons 
+                                +" apper "+ 
+                                (out && "desapper")
+                            }
+                            name="action"
+                            value="google"
+                            style={{marginBottom: "12px"}}                        
+                        >
+                            Cadastrar com google<FcGoogle size={34} />
+                        </button>
+                        <button 
+                            className={
+                                styles.buttons 
+                                +" apper "+ 
+                                (out && "desapper")
+                            }
+                            name="action"
+                            value="facebook"
+                        >
+                            Cadastrar com facebook<FaFacebook size={34} color="#1877f2" />
+                        </button>
+                    </form>
                 </div>             
                 <Link 
                     className={

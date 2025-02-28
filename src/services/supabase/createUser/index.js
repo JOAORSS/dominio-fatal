@@ -1,28 +1,34 @@
 "use server"
 
 import createClientServer from "@/lib/supabase/server";
+import { hashPassword } from "@/utils/passwordHash"
+
+function capitalizeFirstLetter(string) {
+    return string.charAt(0).toUpperCase() + string.slice(1).toLowerCase();
+}
+
+function capitalizeFullName(fullName) {
+    return fullName.split(' ').map(capitalizeFirstLetter).join(' ');
+}
+
+/**
+ * @async
+ * @param {FormData} formData
+ * @returns {{ operation: boolean, hint: string, status: number }}
+ */
 
 export default async function createUser(formData) {
     
-
     const nome = formData.get("nome");
     const sobrenome = formData.get("sobrenome");
     const email = formData.get("email");
     const senha = formData.get("senha");
 
-    function capitalizeFirstLetter(string) {
-        return string.charAt(0).toUpperCase() + string.slice(1).toLowerCase();
-    }
-
-    function capitalizeFullName(fullName) {
-        return fullName.split(' ').map(capitalizeFirstLetter).join(' ');
+    if (!nome || !sobrenome || !email || !senha) {
+        return { operation: false, hint: 'Preencha todos os campos', status: 400 };
     }
 
     const nomeCompleto = capitalizeFullName(`${nome} ${sobrenome}`);
-
-    if (!nome || !sobrenome || !email || !senha) {
-        throw new Error('Todos os campos são obrigatórios');
-    }
 
     const supabase = await createClientServer();
 
@@ -32,28 +38,24 @@ export default async function createUser(formData) {
             .select('id')
             .eq('email', email);
 
-        if (usuarioError) {
-            throw usuarioError;
-        }
+        if(usuarioError) return { operation: false, hint: 'Usuário já cadastrado', status: 409 };
 
         if (usuario.length === 0) {
-            const { data, error } = await supabase
+
+            const hash = await hashPassword(senha);
+
+            const { error } = await supabase
                 .from('usuarios')
                 .insert([
-                    { nome: nomeCompleto, email: email, senha: senha }
+                    { nome: nomeCompleto, email: email, senha: hash }
                 ]);
 
-            if (error) {
-                throw error;
-            }
+            if (error) throw error;
 
-            return data;
-        } else {
-            console.log('Usuário já existe');
-            return { error: 'Usuário já existe', status: 409 };
+            return { operation: true, hint: 'Usuário cadastrado com sucesso', status: 201 };
         }
     } catch (error) {
         console.error('Erro ao buscar ou inserir usuário:', error);
-        return [];
+        return { operation: false, hint: 'Erro ao buscar ou inserir usuário', status: 500 };
     }
 }

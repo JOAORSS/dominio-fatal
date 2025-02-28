@@ -1,9 +1,8 @@
 interface PerfilType {
-    name: string;
-    age: number;
+    nome: string;
     email: string;
-    foto: string;
-    telefone: number;
+    foto?: string;
+    telefone?: number;
 }
 
 export default PerfilType;

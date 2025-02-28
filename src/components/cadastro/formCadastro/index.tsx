@@ -8,10 +8,14 @@ import { useEffect, useState } from "react";
 import zxcvbn from 'zxcvbn';
 import cadastroValidation from "@/utils/cadastroValidation";
 import createUser from "@/services/supabase/createUser";
+import Warning from "@/components/produtoPagina/produtoOpcoes/warning";
+import { useRouter } from "next/navigation";
+import LoadingPage from "@/components/loading";
 
 interface FormCadastroProps { 
     setCadastroToggle: (value: boolean) => void 
 }
+
 
 export default function FormCadastro({ setCadastroToggle } : FormCadastroProps) {
     const [nome, setNome] = useState<string>("");
@@ -21,9 +25,13 @@ export default function FormCadastro({ setCadastroToggle } : FormCadastroProps) 
     const [scoreSenha, setScoreSenha] = useState<number>(0);
     const [scoreText, setScoreText] = useState<string>("");
     const [confirmarSenha, setConfirmarSenha] = useState<string>("");
-
+    const [notify, setNotify] = useState<string | false>("");
+    const [loading, setLoading] = useState<boolean>(false);
+    
     const [toCadastroOptions, setToCadastroOptions] = useState<boolean>(false);
     const [out, setOut] = useState<boolean>(false);
+
+    const router = useRouter();
 
     const scoreTable = [
         {hex: "#CF0E0E", text:"Muito fraca"}, 
@@ -51,9 +59,21 @@ export default function FormCadastro({ setCadastroToggle } : FormCadastroProps) 
                     senha,
                     scoreSenha,
                     confirmarSenha,
-                })) {
+                })) 
+                {
                     const formData = new FormData(e.currentTarget as HTMLFormElement);
-                    await createUser(formData);
+                    const created = await createUser(formData);
+
+                    if (created.operation) { 
+                        setNotify(created.hint);
+                        router.refresh();
+                        router.push("/login");
+                    }
+
+                    if (created.operation == false) setNotify(created.hint);
+
+                } else {
+                    setNotify("Confirme as informacoes dos campos")
                 }
             }}
             id="formCadastro"
@@ -120,7 +140,7 @@ export default function FormCadastro({ setCadastroToggle } : FormCadastroProps) 
                         inputName="senha" 
                         text={senha} 
                         onChange={setSenha} 
-                        validation={() => senha.length < 3 || scoreSenha < 2}
+                        validation={() => senha.length <= 8  || scoreSenha < 2}
                         placeholder="Sua senha aqui" 
                     />
                     {scoreSenha 
@@ -156,19 +176,22 @@ export default function FormCadastro({ setCadastroToggle } : FormCadastroProps) 
                         placeholder="Confirme sua senha" 
                     />
                 </div>
-            </section>    
+            </section>
             <div 
+                className={out ? "desapper" : ""}
                 style={{
                     alignSelf: "center", 
                     width: "436px"}
                     } >
                 <Button 
-                    onClick={() => (document.getElementById('formCadastro') as HTMLFormElement)?.requestSubmit()}
+                    onClick={() => {(document.getElementById('formCadastro') as HTMLFormElement)?.requestSubmit(); setLoading(true)}}
                     maxWidht="438px"
                     type="full"
                 >Cadastrar
                 </Button>
             </div>
+            {loading && <LoadingPage />}            
+            {!!notify && <Warning close={() => setNotify(false)} text={notify} />}
         </form>
     )
 }
