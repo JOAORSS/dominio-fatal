@@ -7,6 +7,8 @@ export default async function Usuario() {
 
     const session = await auth();
 
+    console.table(session?.user);
+
     const image = session?.user?.image;
     const name = session?.user?.name;
     const email = session?.user?.email;

@@ -3,11 +3,11 @@
 import createClientServer from "@/lib/supabase/server";
 import { hashPassword } from "@/utils/passwordHash"
 
-function capitalizeFirstLetter(string) {
+function capitalizeFirstLetter(string: string) {
     return string.charAt(0).toUpperCase() + string.slice(1).toLowerCase();
 }
 
-function capitalizeFullName(fullName) {
+function capitalizeFullName(fullName: string) {
     return fullName.split(' ').map(capitalizeFirstLetter).join(' ');
 }
 
@@ -17,7 +17,7 @@ function capitalizeFullName(fullName) {
  * @returns {{ operation: boolean, hint: string, status: number }}
  */
 
-export default async function createUser(formData) {
+export default async function createUser(formData: FormData): Promise<{ operation: boolean, hint: string, status: number }> {
     
     const nome = formData.get("nome");
     const sobrenome = formData.get("sobrenome");
@@ -42,7 +42,7 @@ export default async function createUser(formData) {
 
         if (usuario.length === 0) {
 
-            const hash = await hashPassword(senha);
+            const hash = await hashPassword(String(senha));
 
             const { error } = await supabase
                 .from('usuarios')
@@ -58,4 +58,6 @@ export default async function createUser(formData) {
         console.error('Erro ao buscar ou inserir usuário:', error);
         return { operation: false, hint: 'Erro ao buscar ou inserir usuário', status: 500 };
     }
+
+    return { operation: false, hint: 'Erro desconhecido', status: 500 };
 }

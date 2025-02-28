@@ -1,4 +1,4 @@
-.campoTexto{
+.campoTexto, .campoSelect {
     display: flex;
     width: 100%;
     align-self: stretch;
@@ -8,6 +8,22 @@
     border-radius: 8px;
     max-height: 40px;
     border: 2px solid var(--detalhes);
+    box-sizing: border-box;
+}
+
+.disabled{
+    opacity: 0.4 !important;
+    cursor: default !important;
+}
+
+.campoSelect{
+    cursor: pointer;
+    padding: 0px;
+    padding-left: 8px;
+    padding-right: 36px;
+    height: 40px;
+    line-height: 40px;
+    background-color: #ffffff;
     box-sizing: border-box;
 }
 

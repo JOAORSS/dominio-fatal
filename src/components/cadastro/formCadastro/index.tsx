@@ -46,36 +46,37 @@ export default function FormCadastro({ setCadastroToggle } : FormCadastroProps) 
         setScoreText(scoreTable[result.score].text);
     }, [senha, setSenha]);
 
+    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
+        if (cadastroValidation({
+            nome,
+            sobrenome,
+            email,
+            senha,
+            scoreSenha,
+            confirmarSenha,
+        })) {
+            const formData = new FormData(e.currentTarget);
+            const created = await createUser(formData);
+    
+            if (created.operation == true) { 
+                setNotify(created.hint);
+                router.refresh();
+                router.push("/login");
+            }
+    
+            if (!created.operation) setNotify(created.hint);
+    
+        } else {
+            setNotify("Confirme as informacoes dos campos");
+        }
+    };
+
     return(
         <form 
             className={styles.container +" "+ 
                 (toCadastroOptions && styles.toCadastroOptions)}
-            onSubmit={async (e) => {
-                e.preventDefault();
-                if (cadastroValidation({
-                    nome,
-                    sobrenome,
-                    email,
-                    senha,
-                    scoreSenha,
-                    confirmarSenha,
-                })) 
-                {
-                    const formData = new FormData(e.currentTarget as HTMLFormElement);
-                    const created = await createUser(formData);
-
-                    if (created.operation) { 
-                        setNotify(created.hint);
-                        router.refresh();
-                        router.push("/login");
-                    }
-
-                    if (created.operation == false) setNotify(created.hint);
-
-                } else {
-                    setNotify("Confirme as informacoes dos campos")
-                }
-            }}
+            onSubmit={handleSubmit}
             id="formCadastro"
         >
             <button 

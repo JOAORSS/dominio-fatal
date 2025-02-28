@@ -7,7 +7,9 @@ import { LuEyeClosed } from "react-icons/lu";
 import { useState } from "react";
 
 interface inputTextProps { 
+    number?: boolean,
     placeholder?: string, 
+    required?: boolean,
     maxWidth?: string,
     maxHeigth?: string,
     inputName?: string,
@@ -19,6 +21,7 @@ interface inputTextProps {
 
 export default function CampoTexto(
     { 
+        number,
         placeholder,
         inputName,
         maxWidth, 
@@ -26,6 +29,7 @@ export default function CampoTexto(
         text, 
         validation, 
         onChange, 
+        required = false,
         type = "normal" 
     }
         : inputTextProps) {
@@ -38,15 +42,16 @@ export default function CampoTexto(
         <>
             {type == "masked" && 
             <IMaskInput 
-                className={styles.campoTexto} 
-                style={{maxWidth: maxWidth, fontSize: "1rem", padding: "0", paddingRight: "12px", paddingLeft: "12px"}} 
+                className={styles.campoTexto +" apper" } 
+                style={{maxWidth: maxWidth, fontSize: "1rem", padding: (required == true ? "12px" : "0"), paddingRight: "12px", paddingLeft: "12px"}} 
                 type="text" 
                 value={text}
                 onChange={(e: React.ChangeEvent<HTMLInputElement>) => onChange(e.target.value)}
                 mask="00000-000"
                 placeholder="00000-000"
                 id="cep"
-                name="cep" 
+                name="cep"
+                required={required} 
             /> }
             {type == "normal" && 
             <input 
@@ -55,7 +60,8 @@ export default function CampoTexto(
                 onChange={(e: React.ChangeEvent<HTMLInputElement>) => onChange(e.target.value)} 
                 style={widthStyle}
                 name={inputName}
-                type="text"
+                required={required}
+                type={number ? "number" : "text"}
                 placeholder={placeholder} 
                 onBlur={() => {
                     if (validation && validation()) {

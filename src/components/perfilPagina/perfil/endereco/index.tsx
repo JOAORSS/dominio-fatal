@@ -36,7 +36,7 @@ export default async function Endereco() {
                     <EnderecoCampo label="Número" valor={endereco.numero ? String(endereco.numero) : "-"}/>
                 </div>
             ):
-                <WarperModalButton /> 
+                <WarperModalButton email={email!} /> 
             }
         </div>
     )
