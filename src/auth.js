@@ -29,8 +29,9 @@ export const {
                     id: profile.email,
                     name: profile.name,
                     email: profile.email,
-                    image: profile.imagem || "/icon.svg",
-                }},
+                    image: profile.image || "/icon.svg",
+                    };
+                },
         }),
         FacebookProvider({
             clientId: process.env.FACEBOOK_CLIENT_ID,
@@ -46,7 +47,7 @@ export const {
             },
             profile(profile) {
                 return {
-                    id: profile.id,
+                    id: profile.email,
                     name: profile.name || profile.first_name + " " + profile.last_name,
                     email: profile.email,
                     image: profile.picture?.data?.url || "/icon.svg",
@@ -60,8 +61,7 @@ export const {
                 try {
                     const user = await getUserByEmail(credentials?.email);
                     if (!user) return null;
-
-                    const isMatch = verifyPassword(credentials?.senha, user?.senha);
+                    const isMatch = await verifyPassword(credentials?.senha, user?.senha);
                     if (!isMatch) return null;
 
                     return {
@@ -69,7 +69,7 @@ export const {
                         name: user.nome,
                         email: user.email,
                         image: user.foto || "/icon.svg",
-                    };
+                    }
 
                 } catch (error) {
                     throw new Error(error.message);

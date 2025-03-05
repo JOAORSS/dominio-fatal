@@ -82,8 +82,6 @@ function ModalFormEndereco(
             email,
             complemento: complemento.length == 0 ? "" : complemento
         };
-
-        console.log(formData);
         
         const response = await insertAddress(formData);
 
@@ -94,7 +92,7 @@ function ModalFormEndereco(
             router.refresh();
             setWarning(response.hint);
         }
-
+        setLoading(false);
     } 
 
     useEffect(() => {

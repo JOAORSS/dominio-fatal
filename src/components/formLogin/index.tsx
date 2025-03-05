@@ -1,4 +1,5 @@
 "use client"
+
 import styles from "./formLogin.module.css"
 import Link from "next/link";
 import { FcGoogle } from "react-icons/fc";
@@ -25,18 +26,23 @@ export default function FormLogin(){
     async function handleFormSubmit(e: React.FormEvent<HTMLFormElement>) {
         e.preventDefault()
         try{
-            const formData = new FormData(e.currentTarget);
+            const formData = {
+                email: email,
+                password: senha
+            };
             const response = await doCredentialLogin(formData);
 
             if (!!response.error) {
                 setWarningCredentials(response.error.message);
             } else {
-                router.push("/");
                 router.refresh();
+                router.push("/");
             }
+            setLoading(false);
 
         } catch(error){
             if (error) setWarningCredentials("Considere checar se o email ou senha estão incorretos")
+            setLoading(false);
         }
     }
 
