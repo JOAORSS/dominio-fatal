@@ -18,12 +18,12 @@
 }
 
 .imagem{
-    height: 200px;
+    height: 230px;
     width: 100%;
     flex-shrink: 0;
     align-self: stretch;
     object-fit: cover;
-    border-radius: 5px;
+    border-radius: 3px;
     aspect-ratio: 3/4;
     max-height: 320px;
 }
@@ -39,14 +39,24 @@
 }
 
 .maisCores{
+    transition: 500ms;
     align-self: stretch;
     display: flex;
     align-items: center;
     justify-content: left;
     gap: 10px;
+    width: fit-content;
+    padding: 5px;
+    background-color: var(--background-interno);
+    border-top-right-radius: 23px;
+    animation-duration: 500ms;
+    animation-fill-mode: forwards;
+    padding-left: 2px;
 }
 
+
 .maisCores__legenda{
+    transition: 500ms;
     margin: 0px;
     color: var(--detalhes);
     font-family: Raleway;
@@ -54,7 +64,22 @@
     font-style: normal;
     font-weight: 600;
     line-height: normal;
+    text-wrap: nowrap;
+    padding-right: 5px;
+    animation: aparecer 500ms;
 }
+@keyframes aparecer{
+    0%{
+        opacity: 0;
+    }
+    40%{
+        opacity: 0;
+    }
+    100%{
+        opacity: 1;
+    }
+}
+
 
 
 .preco{

@@ -129,3 +129,14 @@
        transform: scaleY(-1) rotate(-135deg);
     }
 }
+
+
+@keyframes mais {
+    0% {
+        width: 11%;
+    }
+    100% {
+        width: 80%;
+    }
+    
+}

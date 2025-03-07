@@ -10,7 +10,6 @@ export default async function selectProdutosHome() {
         const { data: produtos } = await supabase
             .from('produtos')
             .select('*')
-            .order('RANDOM()')
             .limit(8);
 
         return produtos || [];

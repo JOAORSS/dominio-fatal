@@ -7,7 +7,15 @@ import ProdutoDescricao from "./produtoDescricao"
 import ProdutoTabela from "./produtoTabela"
 import ProdutoAvaliacao from "./produtoAvaliacao"
 
-export default function ProdutoDetalhes({ comentarios, produto } : { comentarios: {usuario: string, comentario:string}[], produto: Produto }) {
+export default function ProdutoDetalhes(
+    { 
+        comentarios,
+        produto 
+    } : 
+    { 
+        comentarios: {usuario: string, comentario:string}[], 
+        produto: Produto 
+    }) {
     return (
         <>
             <div className={styles.produto}>

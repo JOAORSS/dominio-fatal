@@ -1,5 +1,7 @@
+"use server"
+
 import Container from "@/components/container";
-import ProdutoLeyout from "./leyout";
+import ProdutoLeyout from "./leyoutProduto";
 import ProdutoDetalhes from "@/components/produtoPagina";
 import PageLeyout from "@/components/pageLeyout";
 import CoretorUrlProduto from "@/utils/coretorUrlProduto";
@@ -14,31 +16,32 @@ interface PaginaProdutoProps {
     }>,
 }
 
+
+
 export default async function PaginaProduto({ params }: PaginaProdutoProps) {
     const awaitParams = await params;
     const { id, produto } = awaitParams;
 
-    const resProduto = await fetch(`${process.env.API_PRODUTOS}=${id}`, {
+    const produtoJson = await fetch(`${process.env.API_PRODUTOS}=${id}`, {
         cache: 'no-store',
     });
 
-    const resComentario = await fetch(`${process.env.API_COMENTARIOS}?id=${id}`, {
-        method: 'GET',
-        cache: 'no-store',
-    });
+    const produtoRes: Produto = await produtoJson.json();
 
-    const produtoRes: Produto = await resProduto.json();
-    const comentarioRes: {usuario: string, comentario:string}[] = await resComentario.json();
+    const comentarioRes = [
+        { usuario: "User1", comentario: "Great product!" },
+        { usuario: "User2", comentario: "Very useful." },
+        { usuario: "User3", comentario: "Highly recommend." }
+    ];
 
-    return(
+    return (
         <PageLeyout>
             <Container center>
                 <CoretorUrlProduto id={id} nome={produto} nomeCorreto={produtoRes.nome} />
                 <ProdutoLeyout>
                     <ProdutoDetalhes comentarios={comentarioRes} produto={produtoRes} />
                 </ProdutoLeyout>
-                {/* <GradeProduto filter={false} produtos={[produtoRes]} /> */}
             </Container>
         </PageLeyout>
-    )
+    );
 }

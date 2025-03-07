@@ -4,7 +4,7 @@ export interface Produto {
     preco: string;
     tecido: string;
     imagens: string;
-    maisCores: number;
+    mais_cores: number;
     descricao: string;
     cores: Cor[];
   }
@@ -18,4 +18,3 @@ export interface Cor {
         quantidade: number;
     }[];
 }
-

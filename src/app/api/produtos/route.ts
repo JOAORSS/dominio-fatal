@@ -1,10 +1,10 @@
+"use server"
+
 import { NextResponse } from 'next/server';
-import mysql from 'mysql2/promise';
-import GetDBSettings from '@/utils/mysqlProps';
-import { Cor, Produto } from '@/module/produtoApi';
+import { Cor } from '@/module/produtoApi';
+import createClientServer from '@/lib/supabase/server';
 
 export async function GET(request: Request) {
-  const connectionParams = GetDBSettings();
   const { searchParams } = new URL(request.url);
   const id = searchParams.get('produto');
 
@@ -12,64 +12,36 @@ export async function GET(request: Request) {
     return NextResponse.json({ error: 'Produto ID is missing' }, { status: 400 });
   }
 
-  const values: [number] = [parseInt(id)];
+  const produtoId = parseInt(id);
 
   try {
-    const connection = await mysql.createConnection(connectionParams);
-    const queryProduto = "SELECT * FROM produtos WHERE id = ?;";
-    const queryQuantidade = `
-      SELECT
-      c.id AS cor_id,
-      c.nome AS cor, 
-      c.hex AS hex, 
-      t.id AS tamanho, 
-      ep.quantidade 
-      FROM estoque_produto ep 
-      JOIN cores c ON ep.cor_id = c.id 
-      JOIN tamanhos t ON ep.tamanho_id = t.id 
-      WHERE ep.produto_id = ? 
-      ORDER BY c.nome, FIELD(t.nome, 'PP', 'P', 'M', 'G', 'GG', 'GX');`;
+    const supabase = await createClientServer();
 
-    const [resultsProduto] = await connection.execute<mysql.RowDataPacket[]>(queryProduto, values);
-    const [resultsQuantidade] = await connection.execute<mysql.RowDataPacket[]>(queryQuantidade, values);
+    const { data: produtos } = await supabase
+    .from('produtos')
+    .select('*')
+    .eq('id', produtoId)
+    .single()
 
-    connection.end();
+    const { data: coresRes } = await supabase
+    .from('estoque_produtos')
+    .select(`
+      cor_id,
+      cores!inner(nome, hex),
+      tamanhos!inner(id),
+      quantidade
+    `)
+    .eq('produto_id', produtoId);
 
-    const agruparTamanhosPorCor = (quantidades: { cor_id: number; cor: string; hex: string; tamanho: number; quantidade: number; }[]): Cor[] => {
-      const coresMap = new Map<number, Cor>();
+    if (!coresRes) {
+      return NextResponse.json({ error: 'No data found' }, { status: 404 });
+    }
 
-      quantidades.forEach((item) => {
-        if (!coresMap.has(item.cor_id)) {
-          coresMap.set(item.cor_id, {
-            cor_id: item.cor_id,
-            cor: item.cor,
-            hex: item.hex,
-            tamanhos: [],
-          });
-        }
+    const cores = agruparTamanhosPorCor(coresRes as unknown as { cor_id: number, quantidade: number, cores: { hex: string, nome: string }, tamanhos: { id: number } }[]);
 
-        const cor = coresMap.get(item.cor_id);
-        cor?.tamanhos.push({
-          tamanho: item.tamanho,
-          quantidade: item.quantidade,
-        });
-      });
+    produtos.cores = cores;
 
-      return Array.from(coresMap.values());
-    };
-
-    const produto: Produto = {
-      id: resultsProduto[0].id,
-      nome: resultsProduto[0].nome,
-      preco: resultsProduto[0].preco,
-      tecido: resultsProduto[0].tecido,
-      imagens: resultsProduto[0].imagens,
-      maisCores: resultsProduto[0].mais_cores,
-      descricao: resultsProduto[0].descricao,
-      cores: agruparTamanhosPorCor(resultsQuantidade as { cor_id: number; cor: string; hex: string; tamanho: number; quantidade: number; }[]),
-    };
-
-    return NextResponse.json(produto, { status: 200 });
+    return NextResponse.json(produtos, { status: 200 });
   } catch (err) {
     console.log('ERROR: API - ', (err as Error).message);
     const response = {
@@ -79,3 +51,38 @@ export async function GET(request: Request) {
     return NextResponse.json(response, { status: 500 });
   }
 }
+
+const agruparTamanhosPorCor = (quantidades: 
+  { 
+    cor_id: number,
+    quantidade: number,
+    cores: {
+      hex: string,
+      nome: string
+    },
+    tamanhos: {
+      id: number
+    }
+  }[]): Cor[] => {
+  
+    const coresMap = new Map<number, Cor>();
+
+    quantidades.forEach((item) => {
+      if (!coresMap.has(item.cor_id)) {
+        coresMap.set(item.cor_id, {
+          cor_id: item.cor_id,
+          cor: item.cores.nome,
+          hex: item.cores.hex,
+          tamanhos: [],
+        });
+      }
+
+    const cor = coresMap.get(item.cor_id);
+    cor?.tamanhos.push({
+      tamanho: item.tamanhos.id,
+      quantidade: item.quantidade,
+    });
+  });
+
+  return Array.from(coresMap.values());
+};

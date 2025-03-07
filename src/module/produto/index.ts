@@ -4,7 +4,7 @@ interface Produto {
     preco: number,
     tecido: string,
     imagens: string,
-    maisCores: boolean,
+    mais_cores: boolean,
     descricao: string,
 }
 
