@@ -2,10 +2,9 @@
 
 import { useEffect, useState } from "react"
 import styles from "./cor.module.css"
-import { cor } from '@/module/produto';
 
 interface CoresProps {
-    cores: cor[]
+    cores: {cor: string, hex: string}[]
     setCor: (cor: string) => void
     setTamanho: (tamanho: string) => void
 }

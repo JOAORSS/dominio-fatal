@@ -22,7 +22,7 @@ export default function ProdutoDestaque({ produto }: { produto: Produto }) {
                 />
                 <div className={styles.produto__info}>
                     <h2 className={styles.info__titulo}>{produto.nome}</h2>
-                    {produto.maisCores && 
+                    {produto.mais_cores && 
                         <span className={styles.produto__maisCores}>
                             <Image 
                                 src={"/images/amostra.svg"}

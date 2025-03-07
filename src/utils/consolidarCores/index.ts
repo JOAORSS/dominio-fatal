@@ -1,7 +1,6 @@
 import { Cor } from "@/module/produtoApi";
-import { cor } from "@/module/produto";
 
-export function consolidarCores(cores: Cor[]): cor[] {
+export function consolidarCores(cores: Cor[]): {cor: string, hex: string}[] {
     return cores.map(cor => ({
         cor: cor.cor,
         hex: cor.hex
