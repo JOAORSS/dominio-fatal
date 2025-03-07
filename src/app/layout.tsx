@@ -28,7 +28,11 @@ export const metadata: Metadata = {
     title: "Dominio fatal",
     description: "loja de lingeries e roupas intimas",
     url: "https://dominiofatal.com",
+    phoneNumbers: "+55 54 98438-8564",
     type: "website",
+    countryName: "Brasil",
+    siteName: "Dominio fatal",
+    locale: "pt_BR",
     images: [{ url: "/icon.svg", alt: "logo" }],
   },  
 };

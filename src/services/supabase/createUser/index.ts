@@ -20,12 +20,20 @@ function capitalizeFullName(fullName: string) {
 export default async function createUser(formData: FormData): Promise<{ operation: boolean, hint: string, status: number }> {
     
     const nome = formData.get("nome");
-    const sobrenome = formData.get("sobrenome");
+    let sobrenome = formData.get("sobrenome");
+    const adicionar = formData.get("adicionar");
     const email = formData.get("email");
     const senha = formData.get("senha");
 
-    if (!nome || !sobrenome || !email || !senha) {
-        return { operation: false, hint: 'Preencha todos os campos', status: 400 };
+    if (adicionar === "true") sobrenome = "" 
+
+    if (adicionar != "true"){
+        if (!nome || !sobrenome || !email || !senha) {
+            return { operation: false, hint: 'Preencha todos os campos', status: 400 };
+    }} else {
+        if (!nome || !email || !senha) {
+            return { operation: false, hint: 'Preencha todos os campos', status: 400 };
+        }
     }
 
     const nomeCompleto = capitalizeFullName(`${nome} ${sobrenome}`);
@@ -52,12 +60,10 @@ export default async function createUser(formData: FormData): Promise<{ operatio
 
             if (error) throw error;
 
-            return { operation: true, hint: 'Usuário cadastrado com sucesso', status: 201 };
         }
     } catch (error) {
         console.error('Erro ao buscar ou inserir usuário:', error);
         return { operation: false, hint: 'Erro ao buscar ou inserir usuário', status: 500 };
     }
-
-    return { operation: false, hint: 'Erro desconhecido', status: 500 };
+    return { operation: true, hint: 'Usuário cadastrado com sucesso', status: 201 };
 }

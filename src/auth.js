@@ -29,7 +29,7 @@ export const {
                     id: profile.email,
                     name: profile.name,
                     email: profile.email,
-                    image: profile.image || "/icon.svg",
+                    image: profile.picture,
                     };
                 },
         }),
@@ -59,9 +59,9 @@ export const {
                 if (credentials == null) return null;
 
                 try {
-                    const user = await getUserByEmail(credentials?.email);
+                    const user = await getUserByEmail(credentials.email);
                     if (!user) return null;
-                    const isMatch = await verifyPassword(credentials?.senha, user?.senha);
+                    const isMatch = await verifyPassword(credentials?.senha, user.senha);
                     if (!isMatch) return null;
 
                     return {

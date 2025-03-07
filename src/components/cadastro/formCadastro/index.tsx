@@ -81,6 +81,12 @@ export default function FormCadastro({ setCadastroToggle } : FormCadastroProps) 
         >
             <button 
                 className={styles.backArrow +" apper "+ (out && "desapper")} 
+                style={{
+                    position: "absolute",
+                    top: "24",
+                    left: "20",
+                    zIndex: 2
+                }}
                 onClick={async () => {
                     setOut(true);
                     setTimeout(() => setToCadastroOptions(true), 200);

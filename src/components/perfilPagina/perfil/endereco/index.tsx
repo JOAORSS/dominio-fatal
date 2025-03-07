@@ -1,6 +1,6 @@
 
 
-import fetchDataEndereco from "@/services/supabase/selectEnderecos";
+import fetchDataEndereco from "@/services/supabase/selectAddress";
 import styles from "../../perfil.module.css"
 import { auth } from "@/auth";
 import WarperModalButton from "@/components/modalFormEndereco";
@@ -23,7 +23,7 @@ export default async function Endereco() {
 
     return(
         <div>
-            <h3 className={styles.infoBoxLabel}>Endereco</h3>
+            <h3 className={styles.infoBoxLabel}>Endereço</h3>
             {enderecoArray.length > 0 
             ?(
                 <div className={styles.infoBox +" "+ styles.infoBoxEndereco}>

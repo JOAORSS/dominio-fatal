@@ -97,3 +97,13 @@
         max-width: 344px;
     }
 }
+
+
+.container__adicionar{
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    align-items: center;
+    justify-content: center;
+    height: fit-content;
+}

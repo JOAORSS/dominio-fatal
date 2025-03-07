@@ -5,7 +5,8 @@ import createClientServer from "@/lib/supabase/server";
 export default async function getUserByEmail(email:string): Promise<{id: string, nome: string, email: string, foto: string}[] | [] | null> {
 
      const supabase = await createClientServer();
-    
+
+
       try {
         const { data: usuario, error } = await supabase
           .from('usuarios')
@@ -15,9 +16,9 @@ export default async function getUserByEmail(email:string): Promise<{id: string,
         if (error) throw error;
         if (!usuario || usuario.length === 0) return null;
     
-        return usuario;
+        return usuario[0];
       } catch (error) {
-        console.error('Erro:', error);
+        console.error(`Erro: ${email}`, error);
         return [];
       }
 

@@ -24,12 +24,14 @@ export default function FormLogin(){
     const router = useRouter();
 
     async function handleFormSubmit(e: React.FormEvent<HTMLFormElement>) {
-        e.preventDefault()
+        e.preventDefault();
+
         try{
             const formData = {
                 email: email,
-                password: senha
+                senha: senha
             };
+
             const response = await doCredentialLogin(formData);
 
             if (!!response.error) {

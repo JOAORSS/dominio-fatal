@@ -1,11 +1,8 @@
 import BannerEstacao from "@/components/bannerEstacao";
-import Produto from "@/module/produto";
-import Categorias from "@/components/categorias";
+// import Categorias from "@/components/categorias";
 import GradeProduto from "@/components/gradeProdutos";
-import DestaqueCarroselWrapper from "@/components/destaqueCarrosel";
+// import DestaqueCarroselWrapper from "@/components/destaqueCarrosel";
 import PageLeyout from "@/components/pageLeyout";
-
-const produtos:Produto[] = [];
 
 export default function Home() {
   return (
@@ -14,9 +11,9 @@ export default function Home() {
         texto="Nova coleção de inverno já Disponivel!"
         imagem="/images/imageEstacao.jpeg"
       />
-    <DestaqueCarroselWrapper produtos={produtos} />
-    <Categorias />
-    <GradeProduto produtos={produtos} />
+    {/* <DestaqueCarroselWrapper produtos={produtos} /> */}
+    {/* <Categorias /> */}
+    <GradeProduto />
   </PageLeyout>
   );
 }

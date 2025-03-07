@@ -1,11 +1,14 @@
-import Produto from "@/module/produto";
 import Container from "../container"
 import CardProduto from "./cardProduto"
 import styles from "./gradeProduto.module.css"
 import SectionLabel from "../sectionLabel";
 import { FaFilter } from "react-icons/fa6";
+import selectProdutosHome from "@/services/supabase/selectProdutos";
 
-export default function GradeProduto({ produtos, filter = true }: { produtos: Produto[], filter?: boolean }) {
+export default async function GradeProduto({ filter = true }: { filter?: boolean }) {
+
+    const produtos = await selectProdutosHome();
+
     return(
         <Container center>
             <section className={styles.produtos}>
