@@ -6,6 +6,7 @@ import Search from "./search"
 import Container from "../container"
 import Link from "next/link"
 import { auth } from "@/auth"
+import CarrinhoItems from "./carrinhoItems"
 
 export default async function Cabecalho() {
 
@@ -26,10 +27,11 @@ export default async function Cabecalho() {
                         </Link>
                         <Search />
                         <nav className={styles.nav}>
-                            <Link href={session != null ? "/perfil" : "/login"}>
+                            <Link href={session != null ? "/perfil" : "/login"} style={{display: "flex", alignItems: "center"}}>
                                 <RiUserLine size={50} color="#FFFF" />
                             </Link>
-                            <Link href={session != null ? "/sacola" : "/login"}>
+                            <Link href={session != null ? "/sacola" : "/login"} style={{display: "flex", alignItems: "center", justifyContent: "center", position: "relative"}}>
+                                <CarrinhoItems />
                                 <BsFillHandbagFill size={50} color="#FFF" />
                             </Link>
                         </nav>

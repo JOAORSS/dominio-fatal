@@ -2,7 +2,7 @@ import Frete from "@/module/frete";
 import axios from "axios";
 
 export default function callFreteApi(frete:string, setFrete: (frete: Frete[]) => void) {
-    const freteApi = `http://localhost:3000/api/calcularFrete?cepDestino=${frete}`;
+    const freteApi = `${process.env.NEXT_PUBLIC_DOMINIO}/api/calcularFrete?cepDestino=${frete}`;
     axios.post(freteApi, {
         peso: "1", 
         comprimento: "20", 

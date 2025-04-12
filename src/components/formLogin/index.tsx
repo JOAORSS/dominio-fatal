@@ -18,7 +18,7 @@ export default function FormLogin(){
     const [senha, setSenha] = useState("");
     const [toCadastro, setToCadastro] = useState(false);
     const [out, setOut] = useState(false);
-    const [warningCredentials, setWarningCredentials] = useState<string | boolean>(false);
+    const [warningCredentials, setWarningCredentials] = useState<string | false>(false);
     const [loading, setLoading] = useState(false);
     
     const router = useRouter();
@@ -147,7 +147,7 @@ export default function FormLogin(){
                 </button>
             </form>
             {loading && <LoadingPage />}
-            {warningCredentials && <Warning close={() => setWarningCredentials(false)} text={String(warningCredentials)} />}
+            {warningCredentials && <Warning close={() => setWarningCredentials(false)} text={warningCredentials} key={warningCredentials} />}
         </section>
     )
 }

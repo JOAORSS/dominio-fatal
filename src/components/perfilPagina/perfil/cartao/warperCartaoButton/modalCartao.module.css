@@ -1,0 +1,166 @@
+
+.perfilInfo{
+    margin: 0px;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    padding: 0;
+}
+
+.nome{
+    color: var(--escrita);
+    font-size: 16px;
+    font-weight: 800;
+    margin: 0;
+}
+
+.adicionar{
+    outline: 1px solid var(--detalhes);
+    transition: 200ms;
+    box-sizing: border-box;
+    padding: 0px 20px;
+    cursor: pointer;
+    &:hover{
+        transition: 200ms;
+        background-color: rgba(0, 0, 0, 0.06);
+        color: var(--background-interno);
+    }
+    &:active{
+        transition: 200ms;
+        background-color: rgba(0, 0, 0, 0.12);
+        color: var(--background-interno);
+    }
+}
+
+.modalForm{
+    display: flex;
+    position: fixed;
+    top: 0px;
+    transform: translateY(100%);
+    left: 0;
+    flex-direction: column;
+    gap: 20px;
+    padding: 20px;
+    background: var(--background-interno);
+    border: none;
+    border-radius: 17px;
+    width: 600px;
+    height: fit-content;
+    padding: 20px;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0px 0px 10px rgba(255, 255, 255, 0.044);
+    z-index: 1010;
+}
+
+.infoBox{
+    display: flex;
+    height: fit-content;
+    flex-wrap: wrap;
+    min-height: 75px;
+    padding: 7px 20px;
+    align-items: center;
+    min-width: 340px;
+    gap: 20px;
+    align-self: stretch;
+    border-radius: 17px;
+    background: var(--background-interno);
+    outline: none;
+    border: none;
+}
+
+.perfilInfo{
+    margin: 0px;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    padding: 0;
+}
+
+.nome{
+    color: var(--escrita);
+    font-size: 16px;
+    font-weight: 800;
+    margin: 0;
+}
+
+.adicionar{
+    outline: 1px solid var(--detalhes);
+    transition: 200ms;
+    box-sizing: border-box;
+    padding: 0px 20px;
+    cursor: pointer;
+    &:hover{
+        transition: 200ms;
+        background-color: rgba(0, 0, 0, 0.06);
+        color: var(--background-interno);
+    }
+    &:active{
+        transition: 200ms;
+        background-color: rgba(0, 0, 0, 0.12);
+        color: var(--background-interno);
+    }
+}
+
+
+.form{
+    position: relative;
+    display: flex;
+    flex-direction: row;
+    gap: 20px;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    flex-wrap: wrap;
+}
+
+.close{
+    border: none;
+    background: none;
+    position: absolute;
+    top: 5px;
+    left: 5px;
+    cursor: pointer;
+    width: fit-content;
+    aspect-ratio: 1;
+    color: var(--escrita);
+    font-size: 20px;
+    transition: 200ms;
+    &:hover{
+        transition: 200ms;
+        color: var(--detalhes);
+    }
+}
+
+.cartao{
+    cursor: pointer;
+    border-radius: 6px;
+    background-color: transparent;
+    width: 50%;
+    position: relative;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    justify-content: center;
+    padding: 25px 10px;
+    &:hover{
+        border-color: var(--cor-primaria);
+    }
+}
+
+.cardType{
+    display: flex;
+    gap: 30px;
+}
+
+.cartaoCard{
+
+}
+
+.cartaoTexto{
+    margin: 0px;
+    text-wrap: nowrap;
+    &:hover{
+        color: var(--cor-primaria);
+    }
+}

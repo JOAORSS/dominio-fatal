@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { IoMdHeartEmpty, IoMdHeart } from "react-icons/io";
 import { consolidarCores } from "@/utils/consolidarCores";
 import { Produto } from '@/module/produtoApi';
@@ -15,59 +15,52 @@ import Warning from "./warning";
 import Cores from "./cor";
 import styles from "./produtoOpcoes.module.css"
 import ProdutoFrete from "../produtoFrete";
-import useUserContext from "@/hooks/useUserContext";
 import { useRouter } from "next/navigation";
+import { useSession } from "next-auth/react";
+import { useEffect } from "react";
 
-function validaPropsCarrinho(tamanho: string, cor: string): boolean {
-    if(tamanho && cor){
-        return true;
-    }
-    return false;
-}
+
 
 export default function ProdutoOpcoes({ produto } : { produto: Produto }) {
+
+    function validaPropsCarrinho(tamanho: string, cor: string): boolean {
+        if (tamanho) {
+            if (cor) {
+                adicionarUmProdutoCarrinho(produto, corSelecionada, tamanhoSelecionado);
+                console.log(produto, corSelecionada, tamanhoSelecionado)
+                return true;
+            } else {
+                setWarning("Selecione uma cor para adicionar ao carrinho");
+            }
+        } else {
+            setWarning("Selecione um tamanho para adicionar ao carrinho");
+        }
+        return false;
+    }
+
     const [liked, setLiked] = useState<boolean>(false);
     const [corSelecionada, setCorSelecionada] = useState<string>("");
     const [tamanhoSelecionado, setTamanhoSelecionado] = useState<string>("");
     const [cep, setCep] = useState<string>("");
     const [frete, setFrete] = useState<Frete[]>([]);
     
-    const [warningCarrinho, setWarningCarrinho] = useState<boolean>(false);
-    const [warningComprar, setWarningComprar] = useState<boolean>(false);
-    const [warningFrete, setWarningFrete] = useState<boolean>(false);
+    const [warning, setWarning] = useState<string | false>(false);
 
-    useEffect(() => {
-        if (warningCarrinho) {
-            setWarningComprar(false);
-            setWarningFrete(false);
-        }
-    }, [warningCarrinho]);
-
-    useEffect(() => {
-        if (warningComprar) {
-            setWarningFrete(false);
-            setWarningCarrinho(false);
-        }
-    }, [warningComprar]);
-
-    useEffect(() => {
-        if (warningFrete) {
-            setWarningCarrinho(false);
-            setWarningComprar(false);
-        }
-    }, [warningFrete]);
-
-
-    const { carrinho } = useCarrinhoContext();
+    const { adicionarUmProdutoCarrinho } = useCarrinhoContext();
 
     const tamanhos = consolidarTamanho(produto.cores);
     const cores = consolidarCores(produto.cores);
+
+
+    useEffect(() => {
+        if (!produto.mais_cores) setCorSelecionada("default");
+    }, [produto.mais_cores]);
 
     function handleLike(like : boolean = false) {
         setLiked(like);
     }
 
-    const { usuario } = useUserContext();
+    const session = useSession();
     const router = useRouter();
 
 
@@ -76,7 +69,7 @@ export default function ProdutoOpcoes({ produto } : { produto: Produto }) {
             <div className={styles.preco}>
                 <div className={styles.preco__info}>
                     <span className={styles.info__valor}>
-                        {parseInt(produto.preco)
+                        {produto.preco
                         .toLocaleString('pt-BR', 
                         {style: 'currency', 
                          currency: 'BRL' 
@@ -99,8 +92,8 @@ export default function ProdutoOpcoes({ produto } : { produto: Produto }) {
                 />}
             </div>
             <div className={styles.opcoes}>
-                <label className={styles.opcoes__label}>Cores:</label>
-                    <Cores setCor={setCorSelecionada} setTamanho={setTamanhoSelecionado}  cores={cores} />
+                {produto.mais_cores && <label className={styles.opcoes__label}>Cores:</label>}
+                    {produto.mais_cores && <Cores setCor={setCorSelecionada} setTamanho={setTamanhoSelecionado}  cores={cores} />}
                 <label className={styles.opcoes__label}>Tamanhos:</label>
                     {cores.map((cor) => (
                         cor.cor === corSelecionada && (
@@ -124,33 +117,32 @@ export default function ProdutoOpcoes({ produto } : { produto: Produto }) {
 
             </div>
             <div className={styles.botoes}>
-                {warningCarrinho && <Warning close={() => setWarningCarrinho(false)} text="Selecione uma cor e um tamanho para adicionar ao carrinho "/>}
-                {warningComprar && <Warning close={() => setWarningComprar(false)} text="Selecione uma cor e um tamanho para comprar o produto "/>}
+                {warning && <Warning close={() => setWarning(false)} text={warning} key={warning}/>}
                 <Button 
-                    onClick={() => 
-                        usuario 
-                        ? (validaPropsCarrinho(tamanhoSelecionado, corSelecionada) 
-                            // ? (adicionarUmProdutoCarrinho(produto, corSelecionada, tamanhoSelecionado))
-                            ? console.log("adicionado")
-                            : setWarningCarrinho(true))
-                        : router.push("/login")
-                    } 
+                    onClick={() => {
+                        if (session.status === "authenticated") {
+                            const result = validaPropsCarrinho(tamanhoSelecionado, corSelecionada);
+                            if (result) setWarning("Produto adicionado ao carrinho");
+                        } else {
+                            router.push("/login");
+                        }
+                    }} 
                     type="full" 
                 >Adicionar ao carrinho</Button>
                 <Button 
-                    onClick={() => 
-                        usuario 
-                        ? (validaPropsCarrinho(tamanhoSelecionado, corSelecionada)
-                            ? console.log(carrinho)
-                            : setWarningComprar(true))
-                        : router.push("/login")
-                        
-                    }
+                    onClick={() => {
+                        if (session.status === "authenticated") {
+                            if (!produto.mais_cores) setCorSelecionada("default")
+                            const result = validaPropsCarrinho(tamanhoSelecionado, corSelecionada);
+                            // essa maluca aqui leva pro checkout direto só com esse produto
+                        } else {
+                            router.push("/login");
+                        }
+                    }} 
                     type="filled" 
                 >Comprar agora</Button>
                 <span className={styles.divisoria} />
                 <div className={styles.frete}>
-                    {warningFrete && <Warning close={() => setWarningFrete(false)} text="Informe o seu cep para consultar o prazo de entrega"/>}
                     <label className={styles.frete__label}>Calcular prazo de entrega</label>
                     <div className={styles.frete__cep}>
                     <div className={styles.frete__inputs}>
@@ -161,12 +153,14 @@ export default function ProdutoOpcoes({ produto } : { produto: Produto }) {
                                 if (sanitizedCep.length === 8) {
                                     callFreteApi(sanitizedCep, setFrete);
                                 } else {
-                                    setWarningFrete(true);
+                                    setWarning("Informe o seu cep para consultar o prazo de entrega");
                                 }
                             }}
                             maxWidht="88px"
                             type="full"
-                        >Calcular</Button>
+                        >
+                            Calcular
+                        </Button>
                     </div>
                             {frete.length > 0 
                                 && frete[0].status != 500 

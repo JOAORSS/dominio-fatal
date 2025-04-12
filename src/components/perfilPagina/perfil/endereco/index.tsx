@@ -1,5 +1,3 @@
-
-
 import fetchDataEndereco from "@/services/supabase/selectAddress";
 import styles from "../../perfil.module.css"
 import { auth } from "@/auth";

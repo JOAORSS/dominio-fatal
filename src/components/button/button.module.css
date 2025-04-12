@@ -59,3 +59,13 @@
     font-style: normal;
     font-weight: 400;
 }
+
+.disabled{
+    background-color: rgba(94, 22, 108, 0.54);
+    color: #FFF;
+    border: none;
+    cursor: not-allowed;
+    &:hover{
+        background-color: rgba(94, 22, 108, 0.54);
+    }
+}

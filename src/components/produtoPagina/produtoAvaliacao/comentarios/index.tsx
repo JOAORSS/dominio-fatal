@@ -8,14 +8,16 @@ import { useState } from "react"
 import { useParams, useRouter } from "next/navigation"
 import postarComentario from "@/utils/comentar"
 import Warning from "../../produtoOpcoes/warning"
-import useUserContext from "@/hooks/useUserContext"
+import { useSession } from "next-auth/react"
 
 export default function Comentarios({comentarios}:{ comentarios: {usuario: string, comentario:string}[]}) {
     const [comentario, setComentario] = useState<string>("")
     const [comentariosCli, setComentariosCli] = useState<{usuario: string, comentario:string}[]>(comentarios)
-    const [warningComentario, setWarningComentario] = useState<boolean>(false);
-    const { usuario } = useUserContext();
+    const [warningComentario, setWarningComentario] = useState<string | false>(false);
     const router = useRouter();
+
+    const { data: session } = useSession();
+    
 
     const { id } = useParams();
     const idUse = typeof id === 'string' ? parseInt(id) : id;
@@ -27,13 +29,14 @@ export default function Comentarios({comentarios}:{ comentarios: {usuario: strin
                 <CampoTexto text={comentario} onChange={setComentario} placeholder="Escreva um comentário..." />
                 <Button 
                     onClick={async () => {
-                        if (usuario) {
+                        if (session) {
                             if (typeof idUse === 'number' && comentario.length > 4) {
                                 const result = await postarComentario(idUse, "teste", comentario)
+                                
                                 if (result) {
                                     setComentariosCli(prevComentarios => [...prevComentarios, {usuario: "teste", comentario: comentario}])
                                 } 
-                                setWarningComentario(true)
+                                setWarningComentario("Erro ao postar comentario: é preciso no mínimo 3 letras")
                             }
                         } else {
                             router.push("/login")
@@ -45,7 +48,7 @@ export default function Comentarios({comentarios}:{ comentarios: {usuario: strin
                     Comentar
                 </Button>
             </div>
-            {warningComentario && <Warning close={() => setWarningComentario(false)} text="Erro ao postar comentario: é preciso no mínimo 3 letras" />}
+            {warningComentario && <Warning close={() => setWarningComentario(false)} text={warningComentario} key={warningComentario} />}
             <div className={styles.ultimosComentario}>
             <h3 className={styles.escritaDestaque}>Ultimos comentários</h3>
                 {comentariosCli.length === 0 

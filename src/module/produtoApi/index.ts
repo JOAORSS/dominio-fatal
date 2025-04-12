@@ -1,10 +1,10 @@
 export interface Produto {
     id: number;
     nome: string;
-    preco: string;
+    preco: number;
     tecido: string;
     imagens: string;
-    mais_cores: number;
+    mais_cores: boolean;
     descricao: string;
     cores: Cor[];
   }

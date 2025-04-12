@@ -27,7 +27,7 @@ export async function GET(request: Request) {
     .from('estoque_produtos')
     .select(`
       cor_id,
-      cores!inner(nome, hex),
+      cores!inner(id, nome, hex),
       tamanhos!inner(id),
       quantidade
     `)
@@ -37,13 +37,13 @@ export async function GET(request: Request) {
       return NextResponse.json({ error: 'No data found' }, { status: 404 });
     }
 
-    const cores = agruparTamanhosPorCor(coresRes as unknown as { cor_id: number, quantidade: number, cores: { hex: string, nome: string }, tamanhos: { id: number } }[]);
+    const cores = agruparTamanhosPorCor(coresRes as unknown as { cor_id: number, quantidade: number, cores: { id: number, hex: string, nome: string }, tamanhos: { id: number } }[]);
 
     produtos.cores = cores;
 
     return NextResponse.json(produtos, { status: 200 });
   } catch (err) {
-    console.log('ERROR: API - ', (err as Error).message);
+    console.error('ERROR: API - ', (err as Error).message);
     const response = {
       error: (err as Error).message,
       returnedStatus: 500,
@@ -57,6 +57,7 @@ const agruparTamanhosPorCor = (quantidades:
     cor_id: number,
     quantidade: number,
     cores: {
+      id: number,
       hex: string,
       nome: string
     },

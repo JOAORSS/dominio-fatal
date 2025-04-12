@@ -103,3 +103,39 @@
     width: 500px;
     height: fit-content;
 }
+
+
+.corPop{
+    display: flex;
+    align-items: center;
+    border-radius: 6px;
+    width: 26px;
+    height: 26px;
+    stroke: var(--cor-primaria);
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    border: 2px solid var(--cor-primaria);
+    transition: background-color 0.3s, border-color 0.3s;
+    cursor: pointer;
+    transition: ease-in-out 200ms;
+}
+
+
+.tamanho{
+    background-color: transparent;
+    display: flex;
+    width: 30px;
+    height: 30px;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    border-radius: 7px;
+    border: 1px solid var(--detalhes);
+    color: var(--escrita);
+    font-family: Raleway;
+    font-size: 18px !important;
+    font-weight: 400;
+    transition: ease-in 80ms;
+}

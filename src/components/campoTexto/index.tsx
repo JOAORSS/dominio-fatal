@@ -14,6 +14,7 @@ interface inputTextProps {
     maxHeigth?: string,
     inputName?: string,
     type?: "normal" | "password" | "masked",
+    onPaste?: (event: React.ClipboardEvent<HTMLInputElement>) => void,
     text: string,
     validation?: () => boolean,
     onChange: (text:string) => void,
@@ -29,6 +30,7 @@ export default function CampoTexto(
         text, 
         validation, 
         onChange, 
+        onPaste,
         required = false,
         type = "normal" 
     }
@@ -45,13 +47,16 @@ export default function CampoTexto(
                 className={styles.campoTexto +" apper" } 
                 style={{maxWidth: maxWidth, fontSize: "1rem", padding: (required == true ? "12px" : "0"), paddingRight: "12px", paddingLeft: "12px"}} 
                 type="text" 
+                autoComplete="off"
+                autoCorrect="off"
                 value={text}
                 onChange={(e: React.ChangeEvent<HTMLInputElement>) => onChange(e.target.value)}
                 mask="00000-000"
                 placeholder="00000-000"
                 id="cep"
-                name="cep"
                 required={required} 
+                onFocus={(e: React.ChangeEvent<HTMLInputElement>) => e.target.setAttribute('autocomplete', 'new')}
+                onBlur={(e: React.ChangeEvent<HTMLInputElement>) => e.target.removeAttribute('autocomplete')}
             /> }
             {type == "normal" && 
             <input 
@@ -59,6 +64,7 @@ export default function CampoTexto(
                 value={text}
                 onChange={(e: React.ChangeEvent<HTMLInputElement>) => onChange(e.target.value)} 
                 style={widthStyle}
+                onPaste={onPaste}
                 name={inputName}
                 required={required}
                 type={number ? "number" : "text"}

@@ -32,7 +32,7 @@ export default function WarperModalButton({email} : {email: string}) {
             </button>
             {open && <ModalFormEndereco email={email} setLoading={setLoading} setWarning={setWarning} open={open} setOpen={setOpen} />}
             {open && <div className="blackout" />}
-            {warning.length > 0 && <Warning text={warning} close={() => setWarning("")}/>}
+            {warning.length > 0 && <Warning text={warning} close={() => setWarning("")} key={warning} />}
             {loading && <LoadingPage />}
         </>
     )
@@ -231,7 +231,12 @@ function ModalFormEndereco(
                 <Button maxWidht="300px" type="full" >Adicionar</Button>
             </form>
             <form method="dialog" onSubmit={() => setOpen(false)}>
-                <button className={styles.close} onClick={() => setOpen(false)} type="submit"><IoIosClose color="var(--cor-primaria)" size={50} /></button>
+                <button 
+                    className={styles.close}
+                    onClick={() => setOpen(false)} 
+                    type="submit">
+                        <IoIosClose color="var(--cor-primaria)" size={50} />
+                </button>
             </form>
         </dialog>
     )

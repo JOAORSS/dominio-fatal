@@ -4,7 +4,7 @@ import styles from "./form.module.css"
 import CampoTexto from "@/components/campoTexto";
 import { FaArrowLeft } from "react-icons/fa6";
 import Button from "../../button";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import zxcvbn from 'zxcvbn';
 import cadastroValidation from "@/utils/cadastroValidation";
 import createUser from "@/services/supabase/createUser";
@@ -33,18 +33,19 @@ export default function FormCadastro({ setCadastroToggle } : FormCadastroProps) 
 
     const router = useRouter();
 
-    const scoreTable = [
+    const scoreTable = useMemo(() => [
         {hex: "#CF0E0E", text:"Muito fraca"}, 
         {hex: "#CF0E0E", text:"Fraca"}, 
         {hex: "#EEAD2D", text:"Razoável",},
         {hex: "#008A41", text:"Forte",},
-        {hex: "#008A41", text:"Muito forte"}]
+        {hex: "#008A41", text:"Muito forte"}
+    ], []);
 
     useEffect(() => {
         const result = zxcvbn(senha);
         setScoreSenha(result.score);
         setScoreText(scoreTable[result.score].text);
-    }, [senha, setSenha]);
+    }, [senha, setSenha, scoreTable]);
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();

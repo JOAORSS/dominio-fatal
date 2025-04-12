@@ -1,7 +1,17 @@
 "use server";
 
 import createClientServer from '@/lib/supabase/server';
-import EnderecoType from '@/module/usuario/endereco';
+
+interface EnderecoType {
+  estado: string; 
+  cidade: string;
+  bairro: string;
+  logradouro?: string;
+  rua: string;
+  cep: number;
+  local: 'residencia' | 'apartamento' | 'trabalho' | 'correios';
+  numero: number;
+}
 
 export default async function fetchDataEndereco(email: string): Promise<EnderecoType[] | []> {
   const supabase = await createClientServer();

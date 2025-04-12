@@ -21,7 +21,7 @@ interface ConfigBoxProps {
     | "historico" 
     | "FAC"
     | "legal"
-    | "sair";
+    | "sair",
 }
 
 const reacIconsProps = {
@@ -30,13 +30,13 @@ const reacIconsProps = {
 }
 
 const perfilDictionary = {
-    "editar": {image: <TbUserEdit {...reacIconsProps} />, link: "/perfil/editar", titulo: "Atualizar dados da conta", descricao: "Atualizar dados relativos a conta, nome, telefone, endereco..."},
-    "seguranca": {image: <CgLock {...reacIconsProps} />, link: "/perfil/seguranca", titulo: "Segurança", descricao: "Configurações de segurança da sua conta."},
-    "configuracoes": {image: <FaGears {...reacIconsProps} />, link: "/perfil/configuracoes", titulo: "Configurações", descricao: "Configurações gerais do site."},
+    "editar": {image: <TbUserEdit {...reacIconsProps} />, link: "#editar", titulo: "Atualizar dados da conta", descricao: "Atualizar dados relativos a conta, nome, telefone, endereco..."},
+    "seguranca": {image: <CgLock {...reacIconsProps} />, link: "#seguranca", titulo: "Segurança", descricao: "Configurações de segurança da sua conta."},
+    "configuracoes": {image: <FaGears {...reacIconsProps} />, link: "#configuracoes", titulo: "Configurações", descricao: "Configurações gerais do site."},
     "historico": {image: <IoMdPaper {...reacIconsProps} />, link: "/perfil/historico", titulo: "Histórico de compras", descricao: "Veja o registro de todas as compras que sua conta já efetuou."},
     "FAC": {image: <TbMessageUser {...reacIconsProps} />, link: "/perfil/FAC", titulo: "Fale conosco", descricao: "Canal para entrar em contato com nossos representantes."},
     "legal": {image: <GoLaw {...reacIconsProps} />, link: "/perfil/legal", titulo: "Informações legais", descricao: "Informações legais da empresa."},
-    "sair": {image: <IoMdExit {...reacIconsProps} />, link: "/perfil/sair", titulo: "Sair", descricao: "Sair da conta."}
+    "sair": {image: <IoMdExit {...reacIconsProps} />, link: "#sair", titulo: "Sair", descricao: "Sair da conta."}
 };
 
 

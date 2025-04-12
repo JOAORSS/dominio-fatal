@@ -78,7 +78,7 @@ export default async function insertAddress(formData: formDataProps): Promise<{ 
                     { 
                         estado: estado,
                         cidade: cidade,
-                        cep: cep,
+                        cep: cep.replace("-", ""),
                         bairro: bairro,
                         rua: rua,
                         local: local,

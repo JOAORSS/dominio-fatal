@@ -8,23 +8,28 @@ interface ButtonProps {
     maxWidht?: string;
     destaque?: boolean;
     link?: string;
+    disabled?: boolean;
 }
 
-export default function Button({children, type, onClick, maxWidht, link, destaque = false}: ButtonProps) {
+export default function Button({children, type, onClick, maxWidht, link, destaque = false, disabled = false}: ButtonProps) {
 
     const maxWidhtStyle = {maxWidth: maxWidht}
 
     return (
         <>
-            {!link ? <button
-                onClick={onClick}
-                className={
-                    styles.button +" "+ styles[type] + " " + (destaque && styles.destaque) 
-                }
-                style={maxWidhtStyle}
-            >
-                {children}
-            </button>
+            {!link ? 
+                <button
+                    onClick={onClick}
+                    className={
+                        styles.button +" "+ 
+                        styles[type] + " " + 
+                        (destaque && styles.destaque) +" "+
+                        (disabled && styles.disabled) 
+                    }
+                    style={maxWidhtStyle}
+                >
+                    {children}
+                </button>
             : <Link
                 href={link}
                 onClick={onClick}
