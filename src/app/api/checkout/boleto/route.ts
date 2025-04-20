@@ -1,3 +1,5 @@
+
+
 "use server"
 
 import createClientServer from "@/lib/supabase/server";
@@ -13,8 +15,8 @@ export async function POST(req: NextRequest) {
       token,
       email,
       items,
-      amount,
       cpf,
+      amount,
   }: {
       token: string,
       email: string,
@@ -59,39 +61,20 @@ export async function POST(req: NextRequest) {
     if (supabaseErrorEndereco) throw new Error(supabaseErrorEndereco.message);
 
 
-    function getFormattedExpirationDate(): string {
-      const now = new Date();
-      now.setMinutes(now.getMinutes() + 30);
-
-      const year = now.getFullYear();
-      const month = String(now.getMonth() + 1).padStart(2, '0');
-      const day = String(now.getDate()).padStart(2, '0');
-      const hours = String(now.getHours()).padStart(2, '0');
-      const minutes = String(now.getMinutes()).padStart(2, '0');
-      const seconds = String(now.getSeconds()).padStart(2, '0');
-
-      return `${year}-${month}-${day}T${hours}:${minutes}:${seconds}-03:00`;
-    }
-
     const uuid = crypto.randomUUID();
 
-    const { data } = await axios.post('https://sandbox.api.pagseguro.com/orders', 
+    // TODO: continuar pagemto com boleto
+
+    const { data } = await axios.post(
+      'https://sandbox.api.pagseguro.com/orders',
       {
         reference_id: uuid,
         customer: {
           name: usuario.nome,
-          email: email,
+          email: email, // teste
           tax_id: cpf,
         },
         items: items,
-        qr_codes: [
-          {
-            amount: {
-              value: amount,
-            },
-            expiration_date: getFormattedExpirationDate()
-          }
-        ],
         shipping: {
           address: {
             street: shipping.rua,
@@ -101,25 +84,61 @@ export async function POST(req: NextRequest) {
             city: shipping.cidade,
             region_code: shipping.estado,
             country: "BRA",
-            postal_code: shipping.cep.replace("-", "")
-          }
+            postal_code: shipping.cep.replace("-", ""),
+          },
         },
         notification_urls: [
-          `https://dominio-fatal.vercel.app/notificacoes`
-        ]
-      }, {
+          `https://dominio-fatal.vercel.app/notificacoes`,
+        ],
+        charges: [
+          {
+            reference_id: uuid,
+            description: "Compras na loja Dominio Fatal",
+            amount: {
+              value: amount,
+              currency: "BRL",
+            },
+            payment_method: {
+                type: "BOLETO",
+                boleto: {
+                  due_date: "2023-06-20",
+                  instruction_lines: {
+                    line_1: "Pagamento processado para DESC Fatura",
+                    line_2: "Via PagSeguro"
+                },
+                holder: {
+                    name: "cartao.nome_cartao",
+                    tax_id: cpf,
+                    email: "jose@email.com",
+                    address: {
+                      country: "Brasil",
+                      region: "São Paulo",
+                      region_code: "SP",
+                      city: "Sao Paulo",
+                      postal_code: "01452002",
+                      street: "Avenida Brigadeiro Faria Lima",
+                      number: "1384",
+                      locality: "Pinheiros"
+                    },
+                  },
+                },
+            },
+          },
+        ],
+      },
+      {
         headers: {
-          'Authorization': `Bearer ${process.env.PAGBANK_TOKEN}`,
-          'Content-Type': 'application/json'
-        }
+          Authorization: `Bearer ${process.env.PAGBANK_TOKEN}`,
+          "Content-Type": "application/json",
+        },
       }
-    )
+    );
 
     return NextResponse.json(data, { status: 200 });
 
   } catch (error) {
-    console.error(error);
-    return NextResponse.json({ message: error }, { status: 400 });
+      console.error(error);
+      return NextResponse.json({ message: error }, { status: 400 });
   }
 
 }

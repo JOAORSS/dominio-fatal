@@ -4,7 +4,8 @@
     height: fit-content;
     padding: 20px 37px 36px 37px;
     flex-direction: column;
-    align-items: flex-start;
+    align-items: center;
+    justify-content: center;
     background-repeat: no-repeat !important;
     background-size: 60% !important;
     background-position: center !important;
@@ -207,3 +208,73 @@
       opacity: 1;
     }
   }
+
+
+.configBoxCartao {
+    outline: solid 2px var(--detalhes);
+    height: fit-content;
+    padding: 8px;
+    position: relative;
+    width: fit-content;
+    z-index: 5;
+    opacity: 1;
+
+}
+
+.configBoxCartao:hover {
+    transition: 80ms;
+    outline: solid 2px var(--cor-primaria);
+    &::before{
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        height: 100%;
+        width: 20%;
+        animation: forwards ease-in-out roxinhoApper 0.1s;
+        border-radius: 6px 0px 0px 6px;
+        z-index: 1;
+        background-color: var(--cor-primaria);
+    }
+}
+
+.configBoxCartaoSelecionado{
+    &::before{
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        height: 100%;
+        width: 20%;
+        border-radius: 6px 0px 0px 6px;
+        z-index: 1;
+        background-color: var(--cor-primaria);
+    }
+}
+
+@keyframes roxinhoApper {
+    from{
+        height: 0%;
+    } to {
+        height: 100%;
+    }
+}
+
+.cartaoImage{
+    position: relative;
+    z-index: 5;
+}
+
+.configBoxCartaoTransparente{
+    opacity: 0.5;
+}
+
+.card__container{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding-top: 20px;
+    justify-content: space-between;
+    padding-left: 30px;
+    padding-right: 30px;
+}

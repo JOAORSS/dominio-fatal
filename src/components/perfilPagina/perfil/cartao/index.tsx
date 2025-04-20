@@ -23,7 +23,7 @@ export default async function Cartao() {
                         />
                         <div className={styles.perfilInfo}>
                             <h3 className={styles.nome}>{cartao.nome_cartao}</h3>
-                            <p className={styles.email}>✱✱✱✱  ✱✱✱✱  ✱✱✱✱ {cartao.numero_cartao.toString().slice(-4)}</p>
+                            <p className={styles.email}>✱✱✱✱ ✱✱✱✱ ✱✱✱✱ {cartao.numero_cartao.toString().slice(-4)}</p>
                         </div>
                     </div>
                 ))

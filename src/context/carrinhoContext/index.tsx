@@ -1,7 +1,8 @@
 "use client";
 
 import ProdutoCarrinho from "@/module/produto/produtoCarrinho";
-import React, { createContext, useState, ReactNode } from "react";
+import React, { createContext, ReactNode } from "react";
+import useLocalStorageState from "use-local-storage-state";
 
 type CarrinhoContextType = {
     carrinho: ProdutoCarrinho[];
@@ -16,7 +17,9 @@ CarrinhoContext.displayName = "Carrinho";
 
 
 function CarrinhoProvider({ children }: { children: ReactNode }) {
-    const [carrinho, setCarrinho] = useState<ProdutoCarrinho[]>([]);
+    const [carrinho, setCarrinho] = useLocalStorageState<ProdutoCarrinho[]>('carrinho', {
+        defaultValue: [],
+      });
 
     return (
         <CarrinhoContext.Provider value={{carrinho, setCarrinho}}>

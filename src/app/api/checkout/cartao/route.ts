@@ -3,6 +3,7 @@
 import createClientServer from "@/lib/supabase/server";
 import items from "@/module/checkout/items";
 import axios from "axios";
+import { CartaoType } from "@/services/supabase/selectCard";
 import jwt from 'jsonwebtoken';
 
 import { NextRequest, NextResponse } from "next/server";
@@ -16,6 +17,7 @@ export async function POST(req: NextRequest) {
       cpf,
       amount,
       numeroCartao,
+      parcelas,
   }: {
       token: string,
       email: string,
@@ -23,6 +25,7 @@ export async function POST(req: NextRequest) {
       amount: number,
       cpf: string,
       numeroCartao: string
+      parcelas: string,
     } = await req.json();
 
   try{
@@ -60,15 +63,19 @@ export async function POST(req: NextRequest) {
 
     if (supabaseErrorEndereco) throw new Error(supabaseErrorEndereco.message);
 
-    const { data: cartao } = await supabase
-      .from("cartao")
+    const { data: cartaoBanco, error: supabaseErrorCartao } = await supabase
+      .from("cartoes")
       .select("*")
       .eq("user_id", usuario.id)
       .eq("numero_cartao", numeroCartao)
       .single();
 
+    if (supabaseErrorCartao) throw new Error(supabaseErrorCartao.message);
+    if (!cartaoBanco) throw new Error("Cartão não encontrado");
+    const cartao: CartaoType = cartaoBanco;
 
     const uuid = crypto.randomUUID();
+
 
     const { data } = await axios.post(
       'https://sandbox.api.pagseguro.com/orders',
@@ -105,47 +112,20 @@ export async function POST(req: NextRequest) {
             },
             payment_method: {
               type: cartao.tipo,
-              installments: 1,
+              installments: Number(parcelas),
               capture: true, // questoes a ver
               soft_descriptor: "Loja do meu teste",
               card: {
-                number: cartao.numero,
+                number: cartao.numero_cartao,
                 exp_month: cartao.mes_vencimento,
-                exp_year: cartao.ano_vencimento,
+                exp_year: `20${cartao.ano_vencimento}`,
                 security_code: cartao.cvv,
                 holder: {
-                  name: cartao.nome,
+                  name: cartao.nome_cartao,
                   tax_id: cpf,
                 },
               },
             },
-            sub_merchant: {
-              reference_id: "12345-67891-01112",
-              name: "Domínio Fatal",
-              tax_id: "03351825005", // cpf da empresa
-              mcc: "155",
-              address: { // endereco da empresa
-                country: "BRA",
-                region_code: "RS",
-                city: "Guapore",
-                postal_code: "96822250",
-                street: "Avenida Brigadeiro Faria Lima",
-                number: "1384",
-                locality: "Pinheiros",
-                complement: "Apto 16",
-              },
-            },
-            phones: [
-              {
-                country: "55",
-                area: "54",
-                number: "984388564",
-                type: "MOBILE",
-              },
-            ],
-            notification_urls: [
-              `${process.env.NEXT_PUBLIC_DOMINIO}/nas_ecommerce/277be731-3b7c-4dac-8c4e-4c3f4a1fdc46/`,
-            ],
           },
         ],
       },
@@ -160,8 +140,8 @@ export async function POST(req: NextRequest) {
     return NextResponse.json(data, { status: 200 });
 
   } catch (error) {
-    console.error(error);
-    return NextResponse.json({ message: error }, { status: 400 });
+      console.error(error);
+      return NextResponse.json({ message: error }, { status: 400 });
   }
 
 }

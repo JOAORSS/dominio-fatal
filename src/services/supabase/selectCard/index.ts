@@ -2,7 +2,7 @@
 
 import createClientServer from '@/lib/supabase/server';
 
-interface CartaoType {
+export interface CartaoType {
     numero_cartao: string,
     nome_cartao: string,
     cvv: string,

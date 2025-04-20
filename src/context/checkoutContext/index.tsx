@@ -1,7 +1,8 @@
 "use client";
 
 import Checkout from "@/module/checkout";
-import React, { createContext, useState, ReactNode } from "react";
+import React, { createContext, ReactNode } from "react";
+import useLocalStorageState from "use-local-storage-state";
 
 type CheckoutContextType = {
     checkout: Checkout;
@@ -19,9 +20,11 @@ CheckoutContext.displayName = "Checkout";
 
 
 function CheckoutProvider({ children }: { children: ReactNode }) {
-    const [checkout, setCheckout] = useState<Checkout>({
-        objeto_pagamento: [],
-        objeto_adm: []
+    const [checkout, setCheckout] = useLocalStorageState<Checkout>("checkout", {
+        defaultValue: {
+            objeto_pagamento: [],
+            objeto_adm: []
+        },
     });
 
     return (

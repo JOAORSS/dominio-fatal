@@ -7,7 +7,7 @@ import ProdutoDescricao from "./produtoDescricao"
 import ProdutoTabela from "./produtoTabela"
 import ProdutoAvaliacao from "./produtoAvaliacao"
 
-export default function ProdutoDetalhes(
+export default function ProdutoPagina(
     { 
         comentarios,
         produto 

@@ -3,17 +3,13 @@
 import jwt from 'jsonwebtoken';
 import { NextResponse } from 'next/server';
 
-export async function GET(req: 
-    {
-        name: string;
-        email: string;
-    }
-): Promise<NextResponse<string | null>>{
+export async function GET(req: Request): Promise<NextResponse<string | null>> {
+    const { name, email } = await req.json();
 
     const payload = {
-        name: req.name,
-        email: req.email,
-    }
+        name,
+        email,
+    };
 
     const token = jwt.sign(payload, process.env.SECRET_JWT_SERVER!, { expiresIn: '10m' });
 

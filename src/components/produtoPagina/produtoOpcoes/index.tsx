@@ -133,7 +133,8 @@ export default function ProdutoOpcoes({ produto } : { produto: Produto }) {
                     onClick={() => {
                         if (session.status === "authenticated") {
                             if (!produto.mais_cores) setCorSelecionada("default")
-                            const result = validaPropsCarrinho(tamanhoSelecionado, corSelecionada);
+                                // TODO: mandar o result direto pro checkout quando for compra sem ser pela sacola
+                            // const result = validaPropsCarrinho(tamanhoSelecionado, corSelecionada);
                             // essa maluca aqui leva pro checkout direto só com esse produto
                         } else {
                             router.push("/login");
