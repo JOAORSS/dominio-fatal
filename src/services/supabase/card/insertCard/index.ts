@@ -4,12 +4,10 @@ import createClientServer from "@/lib/supabase/server";
 
 interface formDataProps {
     nome: string,
-    cvv: string,
     numero: string,
-    mesVencimento: string,
-    anoVencimento: string,
     bandeira: string,
     tipo: string,
+    encrypted: string,
     email: string,
 }
 
@@ -21,27 +19,21 @@ export default async function insertCartao(formData: formDataProps):
     }> {
 
     const nome = formData.nome;
-    const cvv = formData.cvv;
-    const numeroCartao = formData.numero;
-    const ano = formData.anoVencimento;
-    const mes = formData.mesVencimento;
+    const ultimosDigitos = formData.numero.replace(/\D/g, '');
     const bandeira = formData.bandeira;
+    const encrypted = formData.encrypted;
     const tipo = formData.tipo;
     const email = formData.email;
 
     if ( 
         nome.length < 1 || 
-        cvv.length < 1 || 
-        numeroCartao.length < 1 || 
-        ano.length < 1 || 
-        mes.length < 1 || 
+        encrypted.length < 1 || 
+        ultimosDigitos.length < 1 || 
         bandeira.length < 1 || 
         tipo.length < 1 || 
         email.length < 1) {
         return { operation: false, hint: 'Preencha todos os campos', status: 400 };
     }
-
-    const numero = numeroCartao.replace(/\D/g, '');
 
     const supabase = await createClientServer();
 
@@ -66,7 +58,7 @@ export default async function insertCartao(formData: formDataProps):
             .from('cartoes')
             .select('id')
             .eq('user_id', usuario_id)
-            .eq("numero_cartao", numero)
+            .eq("ultimos_digitos", ultimosDigitos)
             .single();
 
             if (cartoes) return { operation: false, hint: 'Cartão já cadastrado', status: 409 };
@@ -77,10 +69,8 @@ export default async function insertCartao(formData: formDataProps):
                     {   
                         "user_id": usuario_id,
                         "nome_cartao": nome,
-                        "numero_cartao": numero,
-                        "cvv": cvv,
-                        "mes_vencimento": mes,
-                        "ano_vencimento": ano,
+                        "ultimos_digitos": ultimosDigitos,
+                        "encrypted": encrypted,
                         "tipo": tipo,
                         "bandeira": bandeira,
                     }

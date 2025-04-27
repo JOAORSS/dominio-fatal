@@ -3,13 +3,12 @@
 import createClientServer from '@/lib/supabase/server';
 
 export interface CartaoType {
-    numero_cartao: string,
-    nome_cartao: string,
-    cvv: string,
-    ano_vencimento: string,
-    mes_vencimento: string,
-    tipo: string,
-    bandeira: string,
+  user_id: string,
+  nome_cartao: string,
+  ultimos_digitos: string,
+  encrypted: string,
+  tipo: "CREDIT_CARD" | "DEBIT_CARD",
+  bandeira: string,
 }
 
 export default async function fetchDataCartao(email: string): Promise<CartaoType[] | []> {

@@ -1,4 +1,4 @@
-import fetchDataEndereco from "@/services/supabase/selectAddress";
+import fetchDataEndereco from "@/services/supabase/address/selectAddress";
 import styles from "../../perfil.module.css"
 import { auth } from "@/auth";
 import WarperModalButton from "@/components/modalFormEndereco";

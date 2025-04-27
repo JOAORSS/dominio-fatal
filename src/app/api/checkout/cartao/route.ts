@@ -3,15 +3,15 @@
 import createClientServer from "@/lib/supabase/server";
 import items from "@/module/checkout/items";
 import axios from "axios";
-import { CartaoType } from "@/services/supabase/selectCard";
-import jwt from 'jsonwebtoken';
-
+import { CartaoType } from "@/services/supabase/card/selectCard";
 import { NextRequest, NextResponse } from "next/server";
+import { console } from "inspector";
+
 
 export async function POST(req: NextRequest) {
 
   const {
-      token,
+      expiresAt,
       email,
       items,
       cpf,
@@ -19,7 +19,7 @@ export async function POST(req: NextRequest) {
       numeroCartao,
       parcelas,
   }: {
-      token: string,
+      expiresAt: number,
       email: string,
       items: items,
       amount: number,
@@ -29,21 +29,8 @@ export async function POST(req: NextRequest) {
     } = await req.json();
 
   try{
-    function isTokenExpired(token: string) {
-      try {
-          const decoded = jwt.decode(token);
-          if (decoded && 
-              (decoded as jwt.JwtPayload).exp! < Date.now() / 1000) {
-              return true;
-          }
-          return false;
-      } catch (e) {
-          console.error(e);
-          return true;
-      }
-  }
 
-    if (isTokenExpired(token)) return NextResponse.json({ menssage: "Erro: token expirado"}, { status: 500 });
+    if (isTokenExpired(expiresAt)) return NextResponse.json({ menssage: "Erro: token expirado"}, { status: 500 });
 
     const supabase = await createClientServer();
 
@@ -67,15 +54,19 @@ export async function POST(req: NextRequest) {
       .from("cartoes")
       .select("*")
       .eq("user_id", usuario.id)
-      .eq("numero_cartao", numeroCartao)
+      .eq("ultimos_digitos", numeroCartao)
       .single();
 
     if (supabaseErrorCartao) throw new Error(supabaseErrorCartao.message);
     if (!cartaoBanco) throw new Error("Cartão não encontrado");
     const cartao: CartaoType = cartaoBanco;
 
+    console.log(cartao);
+
     const uuid = crypto.randomUUID();
 
+    console.log(
+        )
 
     const { data } = await axios.post(
       'https://sandbox.api.pagseguro.com/orders',
@@ -116,10 +107,7 @@ export async function POST(req: NextRequest) {
               capture: true, // questoes a ver
               soft_descriptor: "Loja do meu teste",
               card: {
-                number: cartao.numero_cartao,
-                exp_month: cartao.mes_vencimento,
-                exp_year: `20${cartao.ano_vencimento}`,
-                security_code: cartao.cvv,
+                encrypted: cartao.encrypted,
                 holder: {
                   name: cartao.nome_cartao,
                   tax_id: cpf,
@@ -143,5 +131,17 @@ export async function POST(req: NextRequest) {
       console.error(error);
       return NextResponse.json({ message: error }, { status: 400 });
   }
+
+
+function isTokenExpired(expiresAt: number) {
+  const agora = Date.now();
+  const tempoRestante = expiresAt - agora;
+
+  if (tempoRestante <= 0) {
+  return false;
+  }
+}
+
+
 
 }

@@ -11,9 +11,30 @@ import validarCartao from "@/utils/creditCardValidation";
 import mascaraNumeroCartao, { mascaraNumeroPaste } from "@/utils/mascaras/numeros";
 import verificaBandeiraCartao from "@/utils/verificaBandeiraCartao";
 import { FaCreditCard, FaRegCreditCard } from "react-icons/fa6";
-import insertCartao from "@/services/supabase/insertCard";
+import insertCartao from "@/services/supabase/card/insertCard";
 import { useRouter } from "next/navigation";
+import Script from "next/script";
+import { encryptObject } from "@/utils/encriptCard";
 
+declare global {
+    interface Window {
+      PagSeguro?: {
+          setUp: (config: { session: string; env: string }) => void;
+          encryptCard: (params: { 
+              publicKey: string; 
+              holder: string; 
+              number: string; 
+              expMonth: string; 
+              expYear: string; 
+              securityCode: string; 
+          }) => { 
+              encryptedCard: string; 
+              hasErrors: boolean; 
+              errors?: string[] | undefined; 
+          };
+      };
+    }
+}
 export default function WarperModalButton({email} : {email: string}) {
 
     const [open, setOpen] = useState<boolean>(false);
@@ -37,8 +58,8 @@ export default function WarperModalButton({email} : {email: string}) {
                 </div>
             </button>
             {open && <ModalCartao open={open} email={email} setOpen={setOpen} setLoading={setLoading} setWarning={setWarning} />}
-            {warning && <Warning close={() => setWarning("")} text={warning} key={warning} />}
             {open && <div className="blackout" />}
+            {warning && <Warning close={() => setWarning("")} text={warning} key={warning} />}
             {loading && <LoadingPage />}
         </>
     )
@@ -83,17 +104,34 @@ function ModalCartao(
                     if (validarCartao(numero)) {
                         const bandeira = verificaBandeiraCartao(numero);
 
-                        const resp = await insertCartao({
-                            nome: nome,
-                            cvv: cvv,
-                            numero: numero,
-                            anoVencimento: ano.toString(),
-                            mesVencimento: mes.toString(),
-                            tipo: cardType,
-                            bandeira: bandeira,
-                            email: email,
-                        });
+                        const encryptedCard = encryptObject({
+                            name: nome,
+                            number: numero.replace(/\D/g, ''),
+                            securityCode: cvv,
+                            expMonth: mes.toString(),
+                            expYear: `20${ano.toString()}`,
+                        }, "teste") // adicionar o salt real
 
+                        // if (typeof window !== 'undefined' && window.PagSeguro) {
+                        //     const card = window.PagSeguro.encryptCard({
+                        //       publicKey: process.env.NEXT_PUBLIC_PAGBANK_CHAVE_PUBLICA!,
+                        //       holder: nome,
+                        //       number: numero.replace(/\D/g, ''),
+                        //       expMonth: mes.toString(),
+                        //       expYear: `20${ano.toString()}`,
+                        //       securityCode: cvv
+                        //     })
+
+                        console.log(encryptedCard);
+                        
+                        // const resp = await insertCartao({
+                        //     nome: nome,
+                        //     encrypted: encryptedCard,
+                        //     numero: numero.slice(-4),
+                        //     tipo: cardType,
+                        //     bandeira: bandeira,
+                        //     email: email,
+                        // });
 
                         if (resp.operation == true) {
                             setOpen(false)
@@ -101,7 +139,7 @@ function ModalCartao(
                             router.refresh();
                         } else {
                             setWarning(resp.hint);
-                        }
+                        };
 
                         setLoading(false)
                     } else {
@@ -272,10 +310,11 @@ function ModalCartao(
             }
 
             <form method="dialog" onSubmit={() => setOpen(false)}>
-                <button className={styles.close} onClick={() => setOpen(false)} type="submit">
+                <button className={styles.close} type="submit">
                     <IoIosClose color="var(--cor-primaria)" size={50} />
                 </button>
             </form>
+            <Script src="https://assets.pagseguro.com.br/checkout-sdk-js/rc/dist/browser/pagseguro.min.js" />
         </dialog>
     )
 }

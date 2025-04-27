@@ -2,16 +2,15 @@
 
 import createClientServer from "@/lib/supabase/server";
 
-export default async function selectProdutosHome() {
+export default async function selectProdutos() {
 
     const supabase = await createClientServer();
 
     try{
         const { data: produtos } = await supabase
             .from('produtos')
-            .select('*')
-            .limit(8);
-
+            .select('*');
+            
         return produtos || [];
 
     } catch (error) {

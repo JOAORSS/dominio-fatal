@@ -3,11 +3,11 @@ import CardProduto from "./cardProduto"
 import styles from "./gradeProduto.module.css"
 import SectionLabel from "../sectionLabel";
 import { FaFilter } from "react-icons/fa6";
-import selectProdutosHome from "@/services/supabase/selectProdutos";
+import selectProdutos from "@/services/supabase/produtos/selectProdutos";
 
 export default async function GradeProduto({ filter = true }: { filter?: boolean }) {
 
-    const produtos = await selectProdutosHome();
+    const produtos = await selectProdutos();
 
     return(
         <Container center>

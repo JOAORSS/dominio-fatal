@@ -1,22 +1,21 @@
 "use server"
 
+import { isTokenExpired } from "@/components/checkoutPage";
 import createClientServer from "@/lib/supabase/server";
 import items from "@/module/checkout/items";
 import axios from "axios";
-import jwt from 'jsonwebtoken';
-
 import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(req: NextRequest) {
 
   const {
-      token,
+      expiresAt,
       email,
       items,
       amount,
       cpf,
   }: {
-      token: string,
+      expiresAt: number,
       email: string,
       items: items,
       amount: number,
@@ -24,21 +23,8 @@ export async function POST(req: NextRequest) {
     } = await req.json();
 
   try{
-    function isTokenExpired(token: string) {
-      try {
-          const decoded = jwt.decode(token);
-          if (decoded && 
-              (decoded as jwt.JwtPayload).exp! < Date.now() / 1000) {
-              return true;
-          }
-          return false;
-      } catch (e) {
-          console.error(e);
-          return true;
-      }
-  }
 
-    if (isTokenExpired(token)) return NextResponse.json({ menssage: "Erro: token expirado"}, { status: 500 });
+    if (isTokenExpired(expiresAt)) return NextResponse.json({ menssage: "Erro: token expirado"}, { status: 500 });
 
     const supabase = await createClientServer();
 

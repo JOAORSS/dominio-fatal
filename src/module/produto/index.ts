@@ -6,6 +6,7 @@ interface Produto {
     imagens: string,
     mais_cores: boolean,
     descricao: string,
+    cores: string,
 }
 
 

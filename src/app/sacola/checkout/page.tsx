@@ -3,40 +3,22 @@
 import { auth } from "@/auth";
 import CheckoutPage from "@/components/checkoutPage";
 import PageLeyout from "@/components/pageLeyout";
-import fetchDataCartao, { CartaoType } from "@/services/supabase/selectCard";
+import fetchDataCartao, { CartaoType } from "@/services/supabase/card/selectCard";
 import Authorization from "@/utils/userValidation";
+import { redirect } from "next/navigation";
 
 export default async function Checkout() {
 
-    const response = await fetch(`${process.env.NEXT_PUBLIC_DOMINIO}/api/getCheckoutToken`, {
-        method: "GET",
-        headers: {
-            'Content-Type': 'application/json',
-            'Access-Control-Allow-Origin': '*',
-        }
-    });
-
-    const data = await response.json();
     const session = await auth();
-
-    let cartoes: CartaoType[] = [];
-    if (session) {
-        cartoes = await fetchDataCartao(session.user.email);
-        cartoes = cartoes.map(cartao => ({
-            numero_cartao: cartao.numero_cartao,
-            nome_cartao: cartao.nome_cartao,
-            cvv: "",
-            ano_vencimento: "",
-            mes_vencimento: "",
-            tipo: cartao.tipo,
-            bandeira: cartao.bandeira
-        }));
+    if (!session) {
+        return redirect("/login");
     }
+    const cartoes:CartaoType[] = await fetchDataCartao(session!.user.email);
     
     return(
         <Authorization>
             <PageLeyout>
-                <CheckoutPage cartoesData={cartoes} jwt={data} /> 
+                <CheckoutPage cartoesData={cartoes} /> 
             </PageLeyout>
         </Authorization>
     )

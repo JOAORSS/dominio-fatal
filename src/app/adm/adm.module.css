@@ -1,0 +1,45 @@
+
+.adm_menu{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: fit-content;
+    min-height: 50vh;
+    justify-self: start;
+    justify-content: start;
+    margin: 100px;
+    padding: 20px;
+    border-radius: 16px;
+    background-color: aliceblue;
+    box-shadow: var(--box-shadow);
+    
+}
+
+
+.adm_menu_toolbar{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 20px;
+    width: 100%;
+}
+
+.search{
+    position: relative;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    width: 20%;
+}
+
+.search_icon{
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--color-primary);
+}
+

@@ -5,7 +5,7 @@ import CampoTexto from "@/components/campoTexto";
 import Button from "../../../button";
 import { useEffect, useMemo, useState } from "react";
 import zxcvbn from 'zxcvbn';
-import createUser from "@/services/supabase/createUser";
+import createUser from "@/services/supabase/user/createUser";
 import Warning from "@/components/produtoPagina/produtoOpcoes/warning";
 import LoadingPage from "@/components/loading";
 import { useSession } from "next-auth/react";

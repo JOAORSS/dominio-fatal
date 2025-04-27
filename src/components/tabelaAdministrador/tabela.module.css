@@ -1,0 +1,128 @@
+.table {
+    margin-top: 1%;
+    height: auto;
+    align-self: flex-start;
+    border-collapse: collapse;
+    font-family: sans-serif;
+    font-size: 14px;
+}
+
+.th:hover{
+    background-color: #b9b9b9; /* Cor de fundo ao passar o mouse */
+    cursor: pointer; /* Muda o cursor para indicar que é interativo */
+}
+
+.th, .td {
+    border: 1px solid #ccc;
+    padding: 8px;
+    text-align: left;
+    white-space: nowrap;
+    max-width: 200px; /* Define o tamanho máximo da coluna */
+    overflow: hidden; /* Esconde o conteúdo que ultrapassa */
+    text-overflow: ellipsis; /* Adiciona reticências ao conteúdo que ultrapassa */
+    position: relative; /* Necessário para o hover funcionar corretamente */
+}
+
+.th {
+    background-color: #f0f0f0;
+    font-weight: bold;
+}
+
+.img {
+    max-width: 100px;
+    height: auto;
+}
+
+.tr {
+    height: auto;
+}
+
+.td {
+    max-width: 200px; /* Define o tamanho máximo da célula */
+    overflow: hidden; /* Esconde o conteúdo que ultrapassa */
+    text-overflow: clip; /* Adiciona reticências ao conteúdo que ultrapassa */
+    white-space: nowrap; /* Impede quebra de linha */
+}
+
+.td:hover {
+    overflow: auto; /* Habilita o scroll para cédulas longas */
+    max-height: 150px; /* Define uma altura máxima para o scroll */
+    white-space: nowrap; /* Permite quebra de linha ao passar o mouse */
+    background-color: #fff; /* Define um fundo branco */
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2); /* Adiciona sombra para destaque */
+    position: relative; /* Mantém a célula no fluxo normal */
+}
+
+/* Adiciona comportamento para capturar o scroll do mouse */
+.td:hover {
+    pointer-events: auto;
+}
+
+.td:hover::-webkit-scrollbar {
+    width: 6px; /* Largura do scroll */
+    height: 6px; /* Altura do scroll horizontal */
+}
+
+.td:hover::-webkit-scrollbar-thumb {
+    background: #888; /* Cor do scroll */
+    border-radius: 4px; /* Bordas arredondadas */
+}
+
+.td:hover::-webkit-scrollbar-thumb:hover {
+    background: #555; /* Cor do scroll ao passar o mouse */
+}
+
+.td:hover::-webkit-scrollbar-track {
+    background: #f0f0f0; /* Cor do fundo do scroll */
+}
+
+/* Impede o scroll da página ao passar o mouse sobre a célula */
+.td:hover {
+    overscroll-behavior: contain;
+}
+
+
+.adm_menu_principal{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    width: 100%;
+    align-items: center;
+    align-self: flex-start;
+    padding: 0;
+}
+
+.adm_links{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+    width: 20%;
+    align-self: center;
+}
+
+.adm_link_button{
+    padding: 12px;
+    font-size: 1.2em !important;
+    border-radius: 5px;
+    border: 2px solid #cacaca;
+    cursor: pointer;
+}
+
+.adm_link_button:hover{
+    background-color: #dcdcdc; /* Cor de fundo ao passar o mouse */
+    cursor: pointer; /* Muda o cursor para indicar que é interativo */
+}
+
+.semResultados{
+    margin: 5% 0px !important;
+}
+
+.semResultadosContainer{
+    display: flex;
+    flex-direction: column;
+    outline: solid 1px #ccc;
+    justify-content: center;    
+    align-items: center;
+    width: 99.9%;}

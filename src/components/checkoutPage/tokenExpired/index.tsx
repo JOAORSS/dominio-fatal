@@ -3,7 +3,7 @@
 import Button from "@/components/button";
 import { useRouter } from "next/navigation";
 
-export default function TokenExpired() {
+export default function TokenExpired({message}:{message: string}) {
 
     const router = useRouter();
 
@@ -15,9 +15,10 @@ export default function TokenExpired() {
             alignItems: 'center', 
             justifyContent: 'center', 
             height: '80vh',
-            gap: '20px'
+            gap: '20px',
+            width: '20%',
             }}>
-            <h1>Sessão expirada</h1>
+            <h1  >{message}</h1>
             <Button link="/sacola" onClick={(e) => {e!.preventDefault(); router.push("/sacola")}} type="outline" >Voltar à sacola</Button>
         </div>
     )

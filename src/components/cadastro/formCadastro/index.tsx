@@ -7,7 +7,7 @@ import Button from "../../button";
 import { useEffect, useMemo, useState } from "react";
 import zxcvbn from 'zxcvbn';
 import cadastroValidation from "@/utils/cadastroValidation";
-import createUser from "@/services/supabase/createUser";
+import createUser from "@/services/supabase/user/createUser";
 import Warning from "@/components/produtoPagina/produtoOpcoes/warning";
 import { useRouter } from "next/navigation";
 import LoadingPage from "@/components/loading";

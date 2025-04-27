@@ -2,54 +2,81 @@
 
 import Warning from "../produtoPagina/produtoOpcoes/warning";
 import useCheckoutContext from "@/hooks/useCheckoutContext";
-import { CartaoType } from "@/services/supabase/selectCard";
+import { CartaoType } from "@/services/supabase/card/selectCard";
 import { FaPix, FaCreditCard } from "react-icons/fa6";
 import callFreteApi from "@/utils/callFreteApi";
 import { IoIosArrowBack } from "react-icons/io";
 import styles from "./checkoutPage.module.css";
 import { useSession } from "next-auth/react";
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 import TokenExpired from "./tokenExpired";
 import { BsBank2 } from "react-icons/bs";
 import CampoTexto from "../campoTexto";
 import Frete from "@/module/frete";
-import jwt from 'jsonwebtoken';
 import Button from "../button";
 import Image from "next/image";
 import axios from "axios";
 import CampoSelect from "../campoTexto/campoSelect";
 import WarperModalButton from "../perfilPagina/perfil/cartao/warperCartaoButton";
+import { useSearchParams } from "next/navigation";
+import { randomBytes } from "crypto";
 
 
-export default function CheckoutPage({ jwt, cartoesData }: { jwt: string, cartoesData: CartaoType[] }) {
-
+export default function CheckoutPage({ cartoesData }: { cartoesData: CartaoType[] }) {
     
     const { data: session } = useSession();
     const email = session?.user?.email;
-     
+    const searchParams = useSearchParams();
+
     const { checkout } = useCheckoutContext();
 
-    const [expired, setExpired] = useState<boolean>(false);
+    const [expired, setExpired] = useState<boolean>(false);  
+    const [expiresAt, setExpiresAt] = useState<number>();
+    const [sessionId, setSessionId] = useState<string>("");
     const [frete, setFrete] = useState<Frete[]>([]);
     const [cep, setCep] = useState<string>("");
     const [warning, setWarning] = useState<string | false>(false);
     const [cpf, setCpf] = useState<string>("");
     const [formaPagamento, setFormaPagamento] = useState<string | false>(false);
     const [freteOption, setFreteOption] = useState<{name: string, valor: number} | undefined>(undefined);
-    const [cartaoSelecionado, setcartaoSelecionado] = useState<string>("");
+    const [cartaoSelecionado, setCartaoSelecionado] = useState<{ultimos_digitos:string, tipo: "DEBIT_CARD" | "CREDIT_CARD"}>();
     const [parecelas, setParecelas] = useState<string>("1");
 
-    
-        // devo criara a sessão por https://sandbox.sdk.pagseguro.com/checkout-sdk/sessions
-        useEffect(() => {
-            const verifyToken = () => {
-                setExpired(isTokenExpired(jwt));
-            };
+    useEffect(() => {
+        const sessionFromUrl = searchParams.get("session") as string | undefined;
+        const expiresAtFromUrl = searchParams.get("expiresAt") as string | undefined;
 
-            verifyToken();
-            const intervalId = setInterval(verifyToken, 1801000);
-            return () => clearInterval(intervalId);
-        }, [jwt]);
+        if (sessionFromUrl && expiresAtFromUrl) {
+        if (Number(expiresAtFromUrl) < Date.now()) {
+            setExpired(true);
+        }
+
+        setExpiresAt(Number(expiresAtFromUrl));
+        setSessionId(sessionFromUrl);
+
+        } else {
+        setExpired(true);
+        }
+    }, [searchParams]);
+
+
+    useEffect(() => {
+        if (expiresAt !== undefined) {
+            const agora = Date.now();
+            const tempoRestante = expiresAt - agora;
+
+            if (tempoRestante <= 0) {
+            setExpired(true);
+            return;
+            }
+
+            const timeout = setTimeout(() => {
+            setExpired(true);
+            }, tempoRestante);
+        
+            return () => clearTimeout(timeout);
+        }
+    }, [expiresAt]);
 
         const totalPagamento = Number((checkout.objeto_pagamento.reduce((acc, item) => acc + item.preco * item.quantidade, 0) / 100).toFixed(2));        
 
@@ -68,35 +95,38 @@ export default function CheckoutPage({ jwt, cartoesData }: { jwt: string, cartoe
                                 cartoesData.length > 0 &&
                             <div className={styles.card__container}>
                                 {cartoesData.map((cartao, index) => (
-                                <button 
-                                    key={"card-key-"+index}
-                                    type="button"
-                                    style={{outline: cartaoSelecionado == cartao.numero_cartao ? "2px solid var(--cor-primaria)" : ""}}
-                                    className={styles.configBox + " " + 
-                                        styles.configBoxCartao +" "+ 
-                                        (cartaoSelecionado != "" && 
-                                            cartaoSelecionado != cartao.numero_cartao && 
-                                                styles.configBoxCartaoTransparente) + " " +
-                                        (cartaoSelecionado == cartao.numero_cartao ? 
-                                            styles.configBoxCartaoSelecionado : "")
-                                        }
-                                    onClick={() => {setcartaoSelecionado(cartao.numero_cartao)}}
-                                >
-                                    <Image 
-                                        src={`/images/cartoes/${cartao.bandeira.toLowerCase()}.png`}
-                                        className={styles.cartaoImage}
-                                        alt="cartao"
-                                        width={40}
-                                        height={40}
-                                        color="var(--cor-primaria)" 
-                                    />
-                                    <div className={styles.textoBox}>
-                                        <h3 className={styles.titulo}>{cartao.nome_cartao}</h3>
-                                        <p>
-                                            ✱✱✱✱ ✱✱✱✱ ✱✱✱✱ <b>{cartao.numero_cartao.toString().slice(-4)}</b>
-                                        </p>
-                                    </div>
-                                </button>
+                                    <button 
+                                        key={"card-key-"+index}
+                                        type="button"
+                                        style={{outline: cartaoSelecionado?.ultimos_digitos	 == cartao.ultimos_digitos ? "2px solid var(--cor-primaria)" : ""}}
+                                        className={styles.configBox + " " + 
+                                            styles.configBoxCartao +" "+ 
+                                            (!cartaoSelecionado?.ultimos_digitos && 
+                                                cartaoSelecionado?.ultimos_digitos != cartao.ultimos_digitos && 
+                                                    styles.configBoxCartaoTransparente) + " " +
+                                            (cartaoSelecionado?.ultimos_digitos == cartao.ultimos_digitos ? 
+                                                styles.configBoxCartaoSelecionado : "")
+                                            }
+                                        onClick={() => {setCartaoSelecionado({
+                                            ultimos_digitos: cartao.ultimos_digitos,
+                                            tipo: cartao.tipo
+                                        })}}
+                                    >
+                                        <Image 
+                                            src={`/images/cartoes/${cartao.bandeira.toLowerCase()}.png`}
+                                            className={styles.cartaoImage}
+                                            alt="cartao"
+                                            width={40}
+                                            height={40}
+                                            color="var(--cor-primaria)" 
+                                        />
+                                        <div className={styles.textoBox}>
+                                            <h3 className={styles.titulo}>{cartao.nome_cartao}</h3>
+                                            <p>
+                                                ✱✱✱✱ ✱✱✱✱ ✱✱✱✱ <b>{cartao.ultimos_digitos.toString().slice(-4)}</b>
+                                            </p>
+                                        </div>
+                                    </button>
                                 ))}
                             </div>}
                             {cartoesData.length == 0 && <div className={styles.card__container} >
@@ -236,6 +266,7 @@ export default function CheckoutPage({ jwt, cartoesData }: { jwt: string, cartoe
                         {formaPagamento == "cartao" && 
                             freteOption?.valor &&
                             cartaoSelecionado && 
+                            cartaoSelecionado.tipo == "CREDIT_CARD" &&
                             <div className={styles.checkout__nota +" "+ styles.checkout__nota__frete}>
                                 
                                     <CampoSelect 
@@ -273,7 +304,7 @@ export default function CheckoutPage({ jwt, cartoesData }: { jwt: string, cartoe
                 </div>
                 {warning && <Warning close={() => setWarning(false)} text={warning} key={warning} />}
             </section>
-            : <TokenExpired />
+            : <TokenExpired message="Sessão expirada, tente novamente" />
         )
 
         function FormaDePagamento({ tipo, set } : { tipo: "pix" | "cartao" | "boleto", set: (tipo:string) => void }) {    
@@ -332,9 +363,14 @@ export default function CheckoutPage({ jwt, cartoesData }: { jwt: string, cartoe
                 setWarning("Informe o seu cpf");
                 return;
             }
+
+            if (!sessionId) {
+                setWarning("Erro ao continuar, tente novamente mais tarde");
+                return;
+            }
         
             const body: {
-                jwt: string;
+                expiresAt: number;
                 cpf: string;
                 email: string | undefined;
                 amount: number;
@@ -342,10 +378,10 @@ export default function CheckoutPage({ jwt, cartoesData }: { jwt: string, cartoe
                 numeroCartao?: string;
                 parcelas?: string;
             } = {
-                jwt: jwt,
+                expiresAt: expiresAt!,
                 cpf: cpf.replace(/\D/g, ''),
                 email: session?.user?.email,
-                amount: (Number(Number(totalPagamento)+ Number(freteOption.valor)) * 100),
+                amount: (Number(Number(totalPagamento) + Number(freteOption.valor)) * 100),
                 items: checkout.objeto_pagamento.map(item => ({
                     reference_id: item.produto_id,
                     name: item.nome,
@@ -371,7 +407,7 @@ export default function CheckoutPage({ jwt, cartoesData }: { jwt: string, cartoe
                     return;
                 }
         
-                body.numeroCartao = cartaoSelecionado;
+                body.numeroCartao = cartaoSelecionado.ultimos_digitos;
                 body.parcelas = parecelas;
         
             }
@@ -381,23 +417,7 @@ export default function CheckoutPage({ jwt, cartoesData }: { jwt: string, cartoe
                 headersData
             )
         
-                console.log(data); // aqui fazer a resposota do pagamento
+                console.log("teste"); // aqui fazer a resposota do pagamento
             
         }        
 }
-
-export function isTokenExpired(token: string) {
-    try {
-        const decoded = jwt.decode(token);
-        if (decoded && 
-            (decoded as jwt.JwtPayload).exp! < Date.now() / 1000) {
-            return true;
-        }
-        return false;
-    } catch (e) {
-        console.error(e);
-        return true;
-    }
-}
-
-

@@ -7,7 +7,7 @@ import { IoIosAddCircle, IoIosClose } from "react-icons/io";
 import Button from "../button";
 import CampoSelect from "../campoTexto/campoSelect";
 import buscaMunicipio from "@/services/enderecos/municipios";
-import insertAddress from "@/services/supabase/insertAddress";
+import insertAddress from "@/services/supabase/address/insertAddress";
 import Warning from "../produtoPagina/produtoOpcoes/warning";
 import { useRouter } from "next/navigation";
 import LoadingPage from "../loading";

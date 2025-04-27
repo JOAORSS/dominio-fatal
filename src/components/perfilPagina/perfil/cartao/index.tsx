@@ -2,7 +2,7 @@ import Image from "next/image";
 import styles from "../../perfil.module.css";
 import WarperModalButton from "./warperCartaoButton";
 import { auth } from "@/auth";
-import fetchDataCartao from "@/services/supabase/selectCard";
+import fetchDataCartao from "@/services/supabase/card/selectCard";
 
 export default async function Cartao() {
 
@@ -14,7 +14,7 @@ export default async function Cartao() {
         <>
         {cartaoArray.length > 0 && (
                 cartaoArray.map((cartao) => (
-                    <div key={cartao.numero_cartao} className={styles.infoBox}>
+                    <div key={cartao.ultimos_digitos} className={styles.infoBox}>
                         <Image 
                             src={resolveCardImage(cartao.bandeira)}
                             alt={cartao.bandeira}
@@ -23,7 +23,7 @@ export default async function Cartao() {
                         />
                         <div className={styles.perfilInfo}>
                             <h3 className={styles.nome}>{cartao.nome_cartao}</h3>
-                            <p className={styles.email}>✱✱✱✱ ✱✱✱✱ ✱✱✱✱ {cartao.numero_cartao.toString().slice(-4)}</p>
+                            <p className={styles.email}>✱✱✱✱ ✱✱✱✱ ✱✱✱✱ {cartao.ultimos_digitos}</p>
                         </div>
                     </div>
                 ))
