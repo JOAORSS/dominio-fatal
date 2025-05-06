@@ -26,7 +26,6 @@
 .th {
     background-color: #f0f0f0;
     font-weight: bold;
-    position: relative;
 }
 
 .img {
@@ -36,7 +35,6 @@
 
 .tr {
     height: auto;
-    position: relative;
 }
 
 .td {
@@ -127,4 +125,20 @@
     outline: solid 1px #ccc;
     justify-content: center;    
     align-items: center;
-    width: 99.9%;}
+    width: 99.9%;
+}
+
+
+
+.contextMenuItem{
+    padding: 10px 8px;
+    cursor: pointer;
+    width: 100%;
+    text-align: center;
+    border: none;
+    background: none;
+}
+
+.contextMenuItem:hover{
+    background-color: #e5e5e5;
+}

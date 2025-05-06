@@ -1,8 +1,9 @@
 "use server";
 
 import createClientServer from "@/lib/supabase/server";
+import Produto from "@/module/produto";
 
-export default async function selectProdutos() {
+export default async function selectProdutos(): Promise<Produto[] | []> {
 
     const supabase = await createClientServer();
 

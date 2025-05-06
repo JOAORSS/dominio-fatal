@@ -1,5 +1,7 @@
 "use client"
 
+// TODO: arrumar o tratamento do cartão
+
 import { IoIosAddCircle, IoIosClose } from "react-icons/io"
 import styles from "./modalCartao.module.css"
 import { useEffect, useState } from "react"
@@ -9,12 +11,12 @@ import CampoTexto from "@/components/campoTexto";
 import Warning from "@/components/produtoPagina/produtoOpcoes/warning";
 import validarCartao from "@/utils/creditCardValidation";
 import mascaraNumeroCartao, { mascaraNumeroPaste } from "@/utils/mascaras/numeros";
-import verificaBandeiraCartao from "@/utils/verificaBandeiraCartao";
 import { FaCreditCard, FaRegCreditCard } from "react-icons/fa6";
-import insertCartao from "@/services/supabase/card/insertCard";
-import { useRouter } from "next/navigation";
+// import verificaBandeiraCartao from "@/utils/verificaBandeiraCartao";
+// import insertCartao from "@/services/supabase/card/insertCard";
+// import { useRouter } from "next/navigation";
+// import { encryptObject } from "@/utils/encriptCard";
 import Script from "next/script";
-import { encryptObject } from "@/utils/encriptCard";
 
 declare global {
     interface Window {
@@ -66,10 +68,10 @@ export default function WarperModalButton({email} : {email: string}) {
 
 }
 
-function ModalCartao(
+export function ModalCartao(
     {
         open = true, 
-        email,
+        // email,
         setOpen, 
         setWarning,
         setLoading,
@@ -82,7 +84,7 @@ function ModalCartao(
         setLoading: (loading: boolean) => void,
     }) {
 
-    const router = useRouter();
+    // const router = useRouter();
     
     async function handleSubmit(nome:string, cvv:string, numero:string, vencimento:string) {
         setLoading(true)
@@ -102,15 +104,15 @@ function ModalCartao(
                     }
 
                     if (validarCartao(numero)) {
-                        const bandeira = verificaBandeiraCartao(numero);
+                        // const bandeira = verificaBandeiraCartao(numero);
 
-                        const encryptedCard = encryptObject({
-                            name: nome,
-                            number: numero.replace(/\D/g, ''),
-                            securityCode: cvv,
-                            expMonth: mes.toString(),
-                            expYear: `20${ano.toString()}`,
-                        }, "teste") // adicionar o salt real
+                        // const encryptedCard = encryptObject({
+                        //     name: nome,
+                        //     number: numero.replace(/\D/g, ''),
+                        //     securityCode: cvv,
+                        //     expMonth: mes.toString(),
+                        //     expYear: `20${ano.toString()}`,
+                        // }, "teste") // adicionar o salt real
 
                         // if (typeof window !== 'undefined' && window.PagSeguro) {
                         //     const card = window.PagSeguro.encryptCard({
@@ -122,7 +124,7 @@ function ModalCartao(
                         //       securityCode: cvv
                         //     })
 
-                        console.log(encryptedCard);
+                        // console.log(encryptedCard);
                         
                         // const resp = await insertCartao({
                         //     nome: nome,
@@ -133,13 +135,13 @@ function ModalCartao(
                         //     email: email,
                         // });
 
-                        if (resp.operation == true) {
-                            setOpen(false)
-                            setWarning(resp.hint);
-                            router.refresh();
-                        } else {
-                            setWarning(resp.hint);
-                        };
+                        // if (resp.operation == true) {
+                        //     setOpen(false)
+                        //     setWarning(resp.hint);
+                        //     router.refresh();
+                        // } else {
+                        //     setWarning(resp.hint);
+                        // };
 
                         setLoading(false)
                     } else {

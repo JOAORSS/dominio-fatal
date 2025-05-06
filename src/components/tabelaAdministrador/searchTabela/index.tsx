@@ -4,8 +4,10 @@ import CampoTexto from "@/components/campoTexto";
 import { IoCloseOutline, IoSearch } from "react-icons/io5";
 import styles from "./search.module.css";
 import Produto from "@/module/produto";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import Button from "@/components/button";
+import ModalGeral from "@/components/ModalGeral";
+import CampoSelect from "@/components/campoTexto/campoSelect";
 
 export default function SearchTabela( 
     {
@@ -35,29 +37,36 @@ export default function SearchTabela(
         ConfigurandoSearchTags();
     }, [search, produtoOriginal]);
 
+    const [open, setOpen] = useState<boolean>(false);
 
     return (
-        <menu type="toolbar" className={styles.adm_menu_toolbar}>
-            <div className={styles.search}>
-                <div className={styles.search_input}>
-                    <CampoTexto text={search} onChange={setSearch} placeholder="Pesquisar Produto" />
-                    <IoSearch size={20} className={styles.search_icon + " " + (search.length > 20 ? styles.search_icon_desapper : "") } />
+        <>
+            <menu type="toolbar" className={styles.adm_menu_toolbar}>
+                <div className={styles.search}>
+                    <div className={styles.search_input}>
+                        <CampoTexto text={search} onChange={setSearch} placeholder="Pesquisar Produto" />
+                        <IoSearch size={20} className={styles.search_icon + " " + (search.length > 20 ? styles.search_icon_desapper : "") } />
+                    </div>
+                    {tag.length >= 3 && 
+                        <div style={{display: "flex", flexDirection: "row", alignItems: "center"}}>
+                            <p>Procurando por: </p> 
+                            <SearchTag text={tag} onDelete={() => setTag("")} />
+                        </div>}
                 </div>
-                {tag.length >= 3 && 
-                    <div style={{display: "flex", flexDirection: "row", alignItems: "center"}}>
-                        <p>Procurando por: </p> 
-                        <SearchTag text={tag} onDelete={() => setTag("")} />
-                    </div>}
-            </div>
-            <div className={styles.adm_menu_toolbar_adicionar}>
-                <Button 
-                    onClick={() => {}}
-                    type="full"
-                >
-                    Adicionar Produto
-                </Button>
-            </div>
-        </menu>
+                <div className={styles.adm_menu_toolbar_adicionar}>
+                    <Button 
+                        onClick={() => setOpen(!open)}
+                        type="full"
+                    >
+                        Adicionar Produto
+                    </Button>
+                </div>
+            </menu>
+            <ModalGeral top="25%" open={open} setOpen={setOpen} >
+                <ModalAdicionarProduto cores={cores} />
+            </ModalGeral>
+        </>
+        
     )
 
 
@@ -136,5 +145,99 @@ function SearchTag(
     )
 }
 
+
+function ModalAdicionarProduto(
+    {
+        cores,
+    } : 
+    {
+        cores: {id:string, nome:string, hex:string}[]
+    }
+) {
+
+    const [nome, setNome] = useState<string>("");
+    const [preco, setPreco] = useState<string>("");
+    const [tecido, setTecido] = useState<string>("");
+    const [descricao, setDescricao] = useState<string>("");
+    const [corSelecionadaSelect, setCorSelecionadaSelect] = useState<string>("");
+    const [coresSelecionadas, setCoresSelecionadas] = useState<number[]>([]);
+
+    useEffect(() => {
+        if (corSelecionadaSelect !== "" && corSelecionadaSelect !== "cor_unica") {
+            if (!coresSelecionadas.includes(Number(corSelecionadaSelect))) {
+                setCoresSelecionadas([...coresSelecionadas, Number(corSelecionadaSelect)]);
+            }
+        }
+    }, [corSelecionadaSelect])
+
+    return(
+        <form className={styles.adicionarProduto}>
+            <h2>Adicionar novo produto</h2>
+            <div className={styles.divisoria}>
+                <div>
+                    <p>Nome do produto</p>
+                    <CampoTexto onChange={setNome} text={nome} placeholder="Nome do produto..." />
+                </div>
+                <div>
+                    <label>Preço</label>
+                    <CampoTexto onChange={setPreco} text={preco} placeholder="12,34" />
+                </div>
+            </div>
+            <div className={styles.divisoria}>
+                <div>
+                    <label>Tipo de tecido</label>
+                    <CampoTexto onChange={setTecido} text={tecido} placeholder="Tecido..." />
+                </div>
+                <div>
+                    <label>Imagens</label>
+                    <CampoTexto onChange={setDescricao} text={descricao} placeholder="Separe os links com virgula" />
+                </div>
+            </div>
+            <div style={{alignItems: "start"}} className={styles.divisoria}>    
+                <div >
+                    <label>Cores</label>
+                    <CampoSelect
+                        required
+                        maxWidth="224px"
+                        options={[
+                            {label: "Cor Única", value: "cor_unica"},
+                            ...cores.filter(cor => cor.nome.toLowerCase() !== "default").map(cor => ({
+                                label: cor.nome,
+                                value: cor.id
+                            }))
+                        ]}
+                        selected={corSelecionadaSelect} 
+                        onChange={setCorSelecionadaSelect} 
+                    />
+                    <div className={styles.coresSelecionadasContainer}>
+                        {coresSelecionadas.map((cor, index) => {
+                            const corSelecionada = cores.find(corItem => corItem.id == String(cor));
+                            return (
+                                <div key={index} style={{backgroundColor: corSelecionada?.hex}} className={styles.coresSelecionadas}>
+                                    <div style={{backgroundColor: corSelecionada?.hex}} className={styles.coresSelecionadasCor} />
+                                    <span>{corSelecionada?.nome}</span>
+                                    <button onClick={() => setCoresSelecionadas(coresSelecionadas.filter(corId => corId !== cor))} className={styles.coresSelecionadasButton}>
+                                        <IoCloseOutline size={20} />
+                                    </button>
+                                </div>
+                            )
+                        })}
+                    </div>
+                </div>
+                <div>
+                    <label>Descrição</label>
+                    <textarea 
+                        className={styles.campoTextoLongo} 
+                        onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setDescricao(e.target.value)} 
+                        value={descricao} 
+                        placeholder="Descrição..." />
+                </div>
+            </div>
+            <Button type="full" onClick={() => {}}>
+                Adicionar
+            </Button>
+        </form>
+    )
+}
 
 

@@ -4,6 +4,11 @@ import { useEffect, useState } from "react";
 import styles from './tabela.module.css'
 import Produto from "@/module/produto";
 import SearchTabela from "./searchTabela";
+import configuraScrollDasCedulas from "@/utils/configuraScrollCedulas";
+import Link from "next/link";
+import ContextMenuCell from "../contextMenu";
+import { TbMenu, TbSortAscendingLetters, TbSortAscendingNumbers, TbSortDescendingLetters, TbSortDescendingNumbers } from "react-icons/tb";
+import OptionButtonSort from "../contextMenu/optionButton";
 
 export default function WarperTabelaAdministrador(
     {
@@ -18,20 +23,13 @@ export default function WarperTabelaAdministrador(
         const [search, setSearch] = useState<string>("");
         const [tag, setTag] = useState<string>("");
         const [nenhumProduto, setNenhumProduto] = useState<boolean>(false);
+        // const [ordemAscendente, setOrdemAscendente] = useState<boolean>(false);
+
 
         return(
             <>
-                <menu className={styles.adm_menu_principal}>
-                    <div>                        
-                        <h1 >Area de administração</h1>
-                        <h2 >Tabela de produtos</h2>
-                    </div>
-                    <div className={styles.adm_links} >
-                        <button className={styles.adm_link_button}>Estoque</button>
-                        <button className={styles.adm_link_button}>Usuarios</button>
-                        <button className={styles.adm_link_button}>Cores</button>
-                    </div>
-                </menu>
+
+                <MenuAdm />
 
                 <SearchTabela 
                     search={search} 
@@ -66,22 +64,56 @@ export default function WarperTabelaAdministrador(
             configuraScrollDasCedulas();
         }, []);
 
+
         function handleClick(tag: string) {
             setTag(tag);
         }
+
+
+
+        // function handleClickOrdem() {
+        //         setOrdemAscendente(!ordemAscendente);
+        //         const produtoOrdenado = [...produtosArray].sort((a, b) => {
+        //             return ordemAscendente ? Number(b.id) - Number(a.id) : Number(a.id) - Number(b.id);
+        //         });
+        //         setProdutosArray(produtoOrdenado);
+        // }
+
+        const [menuPosition, setMenuPosition] = useState({x: 0, y: 0});
+        const [menuVisible, setMenuVisible] = useState<string>("");
+
+        function handleContextMenu(e: React.MouseEvent<HTMLTableCellElement>, tipo: string){
+            e.preventDefault();
+            setMenuPosition({x: e.clientX, y: e.clientY});
+            setMenuVisible(tipo);
+        }
+
+        const handleClickOutside = (e: MouseEvent) => {
+            if (e.target instanceof HTMLElement && !e.target.closest(`.${styles.contextMenu}`)) {
+                setMenuVisible("");
+            }
+        }
+
+        useEffect(() => {
+            document.addEventListener("click", handleClickOutside);
+            return () => {
+                document.removeEventListener("click", handleClickOutside);
+            };
+        }, []);
+
 
         return(
             <>
             <table className={styles.table}>
                 <thead>
                     <tr>
-                        <th onClick={() => handleClick("Registro")} style={{width: "1%"}} className={styles.th}>#</th>
-                        <th onClick={() => handleClick("Nome")} className={styles.th} style={{width: "10%"}} >Nome</th>
-                        <th onClick={() => handleClick("Preco")} className={styles.th}>Preço</th>
-                        <th onClick={() => handleClick("Tecido")} className={styles.th}>Tecido</th>
-                        <th onClick={() => handleClick("Descricao")} className={styles.th}>Descrição</th>
-                        <th onClick={() => handleClick("Imagem")} className={styles.th} style={{width: "100px"}} >Imagem</th>
-                        <th onClick={() => handleClick("Cores")} className={styles.th} style={{width: "10%"}}>Cores</th>
+                        <th onContextMenu={(e) => handleContextMenu(e, "number")} onClick={() => handleClick("Registro")} style={{width: "1%"}} className={styles.th}>#</th>
+                        <th onContextMenu={(e) => handleContextMenu(e, "text")} onClick={() => handleClick("Nome")} className={styles.th} style={{width: "10%"}} >Nome</th>
+                        <th onContextMenu={(e) => handleContextMenu(e, "number")} onClick={() => handleClick("Preco")} className={styles.th}>Preço</th>
+                        <th onContextMenu={(e) => handleContextMenu(e, "text")} onClick={() => handleClick("Tecido")} className={styles.th}>Tecido</th>
+                        <th onContextMenu={(e) => handleContextMenu(e, "text")} onClick={() => handleClick("Descricao")} className={styles.th}>Descrição</th>
+                        <th onContextMenu={(e) => e.preventDefault()} className={styles.th} style={{width: "100px"}} >Imagem</th>
+                        <th onContextMenu={(e) => handleContextMenu(e, "text")} onClick={() => handleClick("Cores")} className={styles.th} style={{width: "10%"}}>Cores</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -117,37 +149,47 @@ export default function WarperTabelaAdministrador(
                 <div className={styles.semResultadosContainer}>
                     <h2 className={styles.semResultados}>Nenhum resultado</h2>
                 </div>
-                }
+            }
+            {menuVisible.length > 0 &&
+                <ContextMenuCell position={menuPosition}>
+                    <span style={{padding: "10px 0px"}}>Ordenar por:</span>
+                    {menuVisible === "text" && 
+                    <>
+                        <OptionButtonSort hint="Volta para a organização padrão"><TbMenu size={20} /></OptionButtonSort>
+                        <OptionButtonSort hint="Organiza por ordem alfabética"><TbSortAscendingLetters size={20} /></OptionButtonSort>
+                        <OptionButtonSort hint="Organiza por ordem alfabética invertida" ><TbSortDescendingLetters size={20} /></OptionButtonSort>
+                    </>
+                    }
+                    {
+                    menuVisible === "number" && 
+                    <>
+                        <OptionButtonSort hint="Volta para a organização padrão" ><TbMenu size={20} /></OptionButtonSort>
+                        <OptionButtonSort hint="Organiza pela ordem crescente dos números" ><TbSortAscendingNumbers size={20} /></OptionButtonSort>
+                        <OptionButtonSort hint="Organiza pela ordem decrescente dos números" ><TbSortDescendingNumbers size={20} /></OptionButtonSort>
+                    </>
+                    }
+                </ContextMenuCell>
+            }
         </>
         )
-
-
-        function configuraScrollDasCedulas() {
-            const tds = document.querySelectorAll("td");
-            const onWheelHandlers: { td: Element; handler: (e: WheelEvent) => void }[] = [];
-    
-            tds.forEach((td) => {
-            if (td.scrollWidth > td.clientWidth) {
-                const onWheel = (e: WheelEvent): void => {
-                if (e.deltaY !== 0) {
-                    e.preventDefault();
-                    td.scrollLeft += e.deltaY;
-                }
-                };
-    
-                td.addEventListener("wheel", onWheel, { passive: false });
-                onWheelHandlers.push({ td, handler: onWheel });
-            }
-            });
-    
-            return () => {
-            onWheelHandlers.forEach(({ td, handler }) => {
-                td.removeEventListener("wheel", handler as EventListener);
-            });
-            };
-        }
-
-}
 }
 
+}
+
+function MenuAdm() {
+
+    return(
+        <menu className={styles.adm_menu_principal}>
+            <div>                        
+                <h1 >Area de administração</h1>
+                <h2 >Tabela de produtos</h2>
+            </div>
+            <div className={styles.adm_links} >
+                <Link href={"/administracao/estoque"} > <button className={styles.adm_link_button}>Estoque</button></Link>
+                <button className={styles.adm_link_button}>Usuarios</button>
+                <button className={styles.adm_link_button}>Cores</button>
+            </div>
+        </menu>
+    )
+}
 

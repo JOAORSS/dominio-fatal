@@ -39,7 +39,7 @@ export default function WarperModalButton({email} : {email: string}) {
 }
 
 
-function ModalFormEndereco(
+export function ModalFormEndereco(
     {
         open = true, 
         setOpen, 
